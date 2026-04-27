@@ -7,12 +7,9 @@
     <nav>
         <a href="#" class="logo">
             <div class="logo-icon">
-                <svg viewBox="0 0 24 24">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                    <polyline points="9 22 9 12 15 12 15 22" />
-                </svg>
+                <img :src="logoUrl" alt="Hexan Logo" class="logo-img" />
             </div>
-            <span>Hexan<br>Room</span>
+
         </a>
         <div class="nav-links">
             <a href="#">Home</a>
@@ -240,9 +237,12 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 
+import logoImg from '@/assets/logo.png'
+
 const cursorX = ref(0)
 const cursorY = ref(0)
 const mouse = ref({ x: 0, y: 0 })
+const logoUrl = logoImg
 
 function onMouseMove(e) {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -275,18 +275,25 @@ onUnmounted(() => window.removeEventListener('mousemove', updateCursor))
 }
 
 :root {
-    --beige: #e8d9c4;
-    --warm: #c9a87c;
-    --dark: #2b1f14;
-    --rust: #b85c38;
-    --sand: #f5ede0;
-    --text-light: #f5ede0;
+    /* Colors */
+    --color-primary: #C9AD93;
+    --color-secondary: #823011;
+    --color-dark: #4D2C19;
+    --color-accent: #AF7164;
+
+    --color-text-dark: #2b1f14;
+    --color-text-light: #f5ede0;
+    --color-glass: rgba(180, 130, 80, 0.25);
+
+    /* Fonts */
+    --font-main: 'Cormorant Garamond', serif;
+    --font-ui: 'Jost', sans-serif;
 }
 
 #cursor-dot {
     width: 8px;
     height: 8px;
-    background: #b85c38;
+    background: var(--color-accent);
     border-radius: 50%;
     position: fixed;
     pointer-events: none;
@@ -321,31 +328,26 @@ nav {
     border-bottom: 1px solid rgba(180, 140, 100, .2);
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: #2b1f14;
-    text-decoration: none;
+.logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .logo-icon {
-    width: 36px;
-    height: 36px;
-    background: #2b1f14;
-    border-radius: 6px;
+    width: auto;
+    height: 46px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.logo-icon svg {
-    width: 20px;
-    height: 20px;
-    fill: #f5ede0;
+.logo span {
+    font-family: var(--font-main);
+    color: var(--color-text-dark);
+    line-height: 1.1;
+    font-weight: 600;
 }
 
 .nav-links {
@@ -438,10 +440,10 @@ nav {
     top: 15%;
     left: 50%;
     transform: translateX(-50%);
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Lato', sans-serif;
     font-size: clamp(36px, 5.5vw, 72px);
     font-weight: 700;
-    color: #2b1f14;
+    color: #1fc725;
     letter-spacing: .03em;
     white-space: nowrap;
     z-index: 10;
