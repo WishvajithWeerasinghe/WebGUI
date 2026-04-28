@@ -95,36 +95,6 @@
             </svg>
         </div>
 
-        <!-- Wooden Desk -->
-        <div class="floating-item item-desk" :style="parallax(0.025, 0.02)">
-            <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#c09a6a" />
-                        <stop offset="100%" stop-color="#a07840" />
-                    </linearGradient>
-                </defs>
-                <rect x="10" y="0" width="200" height="24" rx="4" fill="url(#desk)" />
-                <rect x="20" y="24" width="180" height="80" rx="3" fill="#b08848" />
-                <rect x="20" y="68" width="180" height="2" fill="#906828" />
-                <rect x="90" y="100" width="40" height="4" rx="2" fill="#7a5018" />
-                <rect x="20" y="104" width="16" height="86" rx="4" fill="#906030" />
-                <rect x="184" y="104" width="16" height="86" rx="4" fill="#906030" />
-                <rect x="20" y="160" width="180" height="10" rx="3" fill="#a06828" />
-            </svg>
-        </div>
-
-        <!-- Clock -->
-        <div class="floating-item item-clock" :style="parallax(0.03, 0.025)">
-            <svg viewBox="0 0 70 80" xmlns="http://www.w3.org/2000/svg">
-                <rect x="5" y="5" width="60" height="50" rx="4" fill="#3a2a10" stroke="#c09a6a" stroke-width="1.5" />
-                <text x="35" y="32" text-anchor="middle" fill="#f5ede0" font-size="12"
-                    font-family="monospace">12:34</text>
-                <rect x="20" y="55" width="12" height="20" rx="2" fill="#2a1a08" />
-                <rect x="38" y="55" width="12" height="20" rx="2" fill="#2a1a08" />
-            </svg>
-        </div>
-
         <!-- Bar Stool -->
         <div class="floating-item item-stool" :style="parallax(0.05, 0.04)">
             <svg viewBox="0 0 100 220" xmlns="http://www.w3.org/2000/svg">
@@ -139,36 +109,6 @@
                 <line x1="20" y1="140" x2="80" y2="140" stroke="#906030" stroke-width="8" stroke-linecap="round" />
                 <line x1="44" y1="160" x2="25" y2="210" stroke="#a07840" stroke-width="8" stroke-linecap="round" />
                 <line x1="56" y1="160" x2="75" y2="210" stroke="#a07840" stroke-width="8" stroke-linecap="round" />
-            </svg>
-        </div>
-
-        <!-- Art 1 (Deer) -->
-        <div class="floating-item item-art1" :style="parallax(0.045, 0.035)">
-            <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
-                <rect width="200" height="240" fill="#f0e0c8" stroke="#a07840" stroke-width="6" />
-                <circle cx="110" cy="90" r="55" fill="#d4722a" opacity=".85" />
-                <ellipse cx="100" cy="200" rx="90" ry="60" fill="#c09070" opacity=".5" />
-                <path d="M80 160 Q90 120 100 110 Q110 120 120 160" fill="#2b1f14" opacity=".8" />
-                <path d="M95 110 L80 85 M80 85 L70 70 M80 85 L90 72" stroke="#2b1f14" stroke-width="3" fill="none" />
-                <path d="M105 110 L120 85 M120 85 L130 70 M120 85 L110 72" stroke="#2b1f14" stroke-width="3"
-                    fill="none" />
-                <line x1="90" y1="160" x2="85" y2="190" stroke="#2b1f14" stroke-width="4" />
-                <line x1="110" y1="160" x2="115" y2="190" stroke="#2b1f14" stroke-width="4" />
-                <rect width="200" height="240" fill="none" stroke="#7a5820" stroke-width="3" />
-            </svg>
-        </div>
-
-        <!-- Art 2 (Abstract) -->
-        <div class="floating-item item-art2" :style="parallax(0.055, 0.045)">
-            <svg viewBox="0 0 140 180" xmlns="http://www.w3.org/2000/svg">
-                <rect width="140" height="180" fill="#f0e0c8" stroke="#a07840" stroke-width="5" />
-                <circle cx="70" cy="85" r="55" fill="#c05820" opacity=".9" />
-                <path d="M30 140 Q70 80 110 40" stroke="#2b1f14" stroke-width="2.5" fill="none" />
-                <path d="M70 80 Q85 60 95 50" stroke="#2b1f14" stroke-width="1.5" fill="none" />
-                <path d="M60 95 Q45 78 38 68" stroke="#2b1f14" stroke-width="1.5" fill="none" />
-                <circle cx="95" cy="50" r="5" fill="#2b1f14" opacity=".6" />
-                <circle cx="38" cy="68" r="4" fill="#2b1f14" opacity=".6" />
-                <rect width="140" height="180" fill="none" stroke="#7a5820" stroke-width="2.5" />
             </svg>
         </div>
 
@@ -407,26 +347,21 @@ nav {
 
 .hero {
     min-height: 100vh;
-    background: linear-gradient(160deg, #dfc9aa 0%, #c9a87c 60%, #b8956a 100%);
+
+    background:
+        /* linear-gradient(160deg, rgba(223, 201, 170, 0.7) 0%, rgba(184, 149, 106, 0.4) 100%), */
+        url('../assets/bg.jpg');
+
+    background-position: 50% 20%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
     position: relative;
-    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.floor {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 22%;
-    background: repeating-linear-gradient(90deg,
-            #c09a6a 0px, #c09a6a 60px,
-            #b8906050 60px, #b8906050 62px,
-            #c09a6a 62px, #c09a6a 140px,
-            #a8804a 140px, #a8804a 141px);
-    border-top: 2px solid #a07850;
 }
 
 .wall-texture {
@@ -522,7 +457,7 @@ nav {
 
 .item-stool {
     bottom: 18%;
-    left: 50%;
+    left: 70%;
     width: 100px;
     margin-left: -50px;
     animation: floatA 4.5s ease-in-out infinite 0.5s;
@@ -535,33 +470,11 @@ nav {
     animation: floatB 5.5s ease-in-out infinite 0.8s;
 }
 
-.item-art1 {
-    top: 16%;
-    right: 22%;
-    width: 180px;
-    animation: floatA 6.5s ease-in-out infinite 0.2s;
-}
-
-.item-art2 {
-    top: 14%;
-    right: 5%;
-    width: 130px;
-    animation: floatB 5s ease-in-out infinite 1.2s;
-}
-
 .item-desk {
     bottom: 20%;
     left: 32%;
     width: 220px;
     animation: floatB 7s ease-in-out infinite 0.4s;
-}
-
-.item-clock {
-    bottom: 37%;
-    left: 37%;
-    width: 70px;
-    z-index: 6;
-    animation: floatA 7s ease-in-out infinite 0.9s;
 }
 
 .item-pendant {
