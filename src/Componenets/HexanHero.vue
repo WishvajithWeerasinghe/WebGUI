@@ -196,10 +196,6 @@ function parallax(sx, sy) {
     return { transform: `translate(${dx}px, ${dy}px)` }
 }
 
-function updateCursor(e) {
-    cursorX.value = e.clientX
-    cursorY.value = e.clientY
-}
 
 onMounted(() => window.addEventListener('mousemove', updateCursor))
 onUnmounted(() => window.removeEventListener('mousemove', updateCursor))
