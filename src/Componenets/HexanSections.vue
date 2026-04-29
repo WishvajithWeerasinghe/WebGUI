@@ -10,30 +10,24 @@
         </div>
 
         <div class="grid grid-cols-3 gap-6 max-w-5xl mx-auto">
-            <div
-                v-for="(product, index) in products"
-                :key="product.name"
+            <div v-for="(product, index) in products" :key="product.name"
                 class="relative group overflow-hidden cursor-pointer transition-transform duration-300 hover:-translate-y-1.5"
-                :class="index === 1 ? 'bg-[#1a5f6a]' : 'bg-white'"
-            >
+                :class="index === 1 ? 'bg-[#1a5f6a]' : 'bg-white'">
                 <!-- Badge -->
-                <div
-                    v-if="product.badge"
-                    class="absolute top-3.5 left-3.5 z-10 bg-[#af7164] text-white text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1"
-                >
+                <div v-if="product.badge"
+                    class="absolute top-3.5 left-3.5 z-10 bg-[#af7164] text-white text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1">
                     {{ product.badge }}
                 </div>
 
                 <!-- Image -->
                 <div class="relative aspect-[4/3] overflow-hidden">
-                    <img
-                        :src="product.img"
-                        :alt="product.name"
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
+                    <img :src="product.img" :alt="product.name"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     <!-- Overlay -->
-                    <div class="absolute inset-0 bg-[#2b1f14]/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button class="border border-[#f5ede0] text-[#f5ede0] text-xs tracking-widest px-6 py-2.5 hover:bg-[#f5ede0] hover:text-[#2b1f14] transition-colors duration-200">
+                    <div
+                        class="absolute inset-0 bg-[#2b1f14]/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button
+                            class="border border-[#f5ede0] text-[#f5ede0] text-xs tracking-widest px-6 py-2.5 hover:bg-[#f5ede0] hover:text-[#2b1f14] transition-colors duration-200">
                             Quick View
                         </button>
                     </div>
@@ -41,16 +35,11 @@
 
                 <!-- Info -->
                 <div class="flex items-center justify-between px-4 py-4">
-                    <span
-                        class="text-sm font-medium tracking-wide"
-                        :class="index === 1 ? 'text-[#e8f4f0]' : 'text-[#2b1f14]'"
-                    >
+                    <span class="text-sm font-medium tracking-wide"
+                        :class="index === 1 ? 'text-[#e8f4f0]' : 'text-[#2b1f14]'">
                         {{ product.name }}
                     </span>
-                    <span
-                        class="text-sm font-light"
-                        :class="index === 1 ? 'text-[#e8f4f0]' : 'text-[#7a6050]'"
-                    >
+                    <span class="text-sm font-light" :class="index === 1 ? 'text-[#e8f4f0]' : 'text-[#7a6050]'">
                         {{ product.price }}
                     </span>
                 </div>
@@ -191,12 +180,10 @@ const hoveredCard = ref(null)
 .showcase-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        to left,
-        rgba(43, 31, 20, 0.72) 0%,
-        rgba(43, 31, 20, 0.45) 50%,
-        rgba(43, 31, 20, 0.1) 100%
-    );
+    background: linear-gradient(to left,
+            rgba(43, 31, 20, 0.72) 0%,
+            rgba(43, 31, 20, 0.45) 50%,
+            rgba(43, 31, 20, 0.1) 100%);
 }
 
 .showcase-content {

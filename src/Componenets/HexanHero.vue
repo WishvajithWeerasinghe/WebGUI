@@ -13,7 +13,7 @@
         </a>
         <div class="nav-links">
             <a href="#">Home</a>
-            <a href="#">Products</a>
+            <RouterLink to="/products">Products</RouterLink>
             <a href="#">Room</a>
             <a href="#">About us</a>
         </div>
@@ -378,7 +378,7 @@ nav {
     font-family: 'Lato', sans-serif;
     font-size: clamp(36px, 5.5vw, 72px);
     font-weight: 700;
-    color: #1fc725;
+    color: var(--color-text-dark);
     letter-spacing: .03em;
     white-space: nowrap;
     z-index: 10;
