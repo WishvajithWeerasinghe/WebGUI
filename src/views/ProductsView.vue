@@ -6,20 +6,31 @@
                 <img src="@/assets/logo.png" alt="Hexan Logo" class="nav-logo" />
             </a>
             <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/products" class="active">Products</a>
-                <a href="#">Room</a>
-                <a href="#">About us</a>
+                <RouterLink to="/">Home</RouterLink>
+                <RouterLink to="/products" class="active">Products</RouterLink>
+                <RouterLink to="/room">Room</RouterLink>
+                <RouterLink to="/about">About us</RouterLink>
             </div>
             <div class="nav-icons">
-                <button aria-label="Search">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <button aria-label="Search" @click="$router.push('/products')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
                 </button>
                 <button aria-label="Cart">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <path d="M16 10a4 4 0 01-8 0" />
+                    </svg>
                 </button>
                 <button aria-label="Menu">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
                 </button>
             </div>
         </nav>
@@ -28,7 +39,8 @@
         <main class="products-page">
             <!-- Top bar -->
             <div class="topbar">
-                <span class="result-count" v-if="!loading">Showing {{ showingFrom }}–{{ showingTo }} of {{ total }} results</span>
+                <span class="result-count" v-if="!loading">Showing {{ showingFrom }}–{{ showingTo }} of {{ total }}
+                    results</span>
                 <span class="result-count" v-else>Loading…</span>
                 <div class="sort-wrap">
                     <label class="sort-label">Sort by:</label>
@@ -55,22 +67,21 @@
 
                     <!-- Products -->
                     <div v-else class="product-grid">
-                        <div
-                            v-for="product in products"
-                            :key="product.id"
-                            class="product-card"
-                        >
+                        <div v-for="product in products" :key="product.id" class="product-card"
+                            @click="$router.push('/products/' + product.id)" style="cursor: pointer;">
+
                             <div class="card-img-wrap">
                                 <img :src="product.thumbnail" :alt="product.title" class="card-img" loading="lazy" />
                                 <div class="card-overlay">
-                                    <button class="btn-quick">Quick View</button>
+                                    <button class="btn-quick" @click.stop="openQuickView(product)">Quick View</button>
                                 </div>
                                 <span v-if="product.discountPercentage > 10" class="card-badge">Sale</span>
                             </div>
                             <div class="card-body">
                                 <p class="card-title">{{ product.title }}</p>
                                 <div class="card-stars">
-                                    <span v-for="s in 5" :key="s" class="star" :class="s <= Math.round(product.rating) ? 'filled' : ''">★</span>
+                                    <span v-for="s in 5" :key="s" class="star"
+                                        :class="s <= Math.round(product.rating) ? 'filled' : ''">★</span>
                                 </div>
                                 <p class="card-price">${{ product.price.toFixed(2) }}</p>
                             </div>
@@ -79,14 +90,9 @@
 
                     <!-- Pagination -->
                     <div class="pagination" v-if="!loading && totalPages > 1">
-                        <button
-                            v-for="p in paginationPages"
-                            :key="p"
-                            class="page-btn"
-                            :class="{ active: p === currentPage, ellipsis: p === '…' }"
-                            :disabled="p === '…'"
-                            @click="p !== '…' && goToPage(p)"
-                        >{{ p }}</button>
+                        <button v-for="p in paginationPages" :key="p" class="page-btn"
+                            :class="{ active: p === currentPage, ellipsis: p === '…' }" :disabled="p === '…'"
+                            @click="p !== '…' && goToPage(p)">{{ p }}</button>
                         <button class="page-btn view-all" @click="viewAll">view all</button>
                     </div>
                 </section>
@@ -95,15 +101,13 @@
                 <aside class="sidebar">
                     <!-- Search -->
                     <div class="search-wrap">
-                        <input
-                            v-model="searchQuery"
-                            type="text"
-                            placeholder="Search..."
-                            class="search-input"
-                            @keyup.enter="applyFilters"
-                        />
+                        <input v-model="searchQuery" type="text" placeholder="Search..." class="search-input"
+                            @keyup.enter="applyFilters" />
                         <button class="search-btn" @click="applyFilters">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8" />
+                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                            </svg>
                         </button>
                     </div>
 
@@ -111,13 +115,8 @@
                     <div class="filter-block">
                         <h4 class="filter-title">Category</h4>
                         <ul class="filter-list">
-                            <li
-                                v-for="cat in categories"
-                                :key="cat.slug"
-                                class="filter-item"
-                                :class="{ selected: selectedCategory === cat.slug }"
-                                @click="selectCategory(cat.slug)"
-                            >
+                            <li v-for="cat in categories" :key="cat.slug" class="filter-item"
+                                :class="{ selected: selectedCategory === cat.slug }" @click="selectCategory(cat.slug)">
                                 <span class="filter-name">{{ cat.label }}</span>
                                 <span class="filter-count">({{ cat.count }})</span>
                             </li>
@@ -128,13 +127,8 @@
                     <div class="filter-block">
                         <h4 class="filter-title">Color</h4>
                         <ul class="filter-list">
-                            <li
-                                v-for="col in colors"
-                                :key="col.name"
-                                class="filter-item"
-                                :class="{ selected: selectedColor === col.name }"
-                                @click="selectColor(col.name)"
-                            >
+                            <li v-for="col in colors" :key="col.name" class="filter-item"
+                                :class="{ selected: selectedColor === col.name }" @click="selectColor(col.name)">
                                 <span class="color-dot" :style="{ background: col.hex }"></span>
                                 <span class="filter-name">{{ col.name }}</span>
                                 <span class="filter-count">({{ col.count }})</span>
@@ -146,14 +140,8 @@
                     <div class="filter-block">
                         <h4 class="filter-title">Price</h4>
                         <div class="price-range">
-                            <input
-                                type="range"
-                                min="0"
-                                max="2000"
-                                v-model="maxPrice"
-                                class="range-slider"
-                                @change="applyFilters"
-                            />
+                            <input type="range" min="0" max="2000" v-model="maxPrice" class="range-slider"
+                                @change="applyFilters" />
                             <div class="price-label">Price $4 – ${{ maxPrice }}</div>
                             <button class="btn-filter" @click="applyFilters">Filter</button>
                         </div>
@@ -167,7 +155,9 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <h3 class="footer-logo">Hevan Room</h3>
-                    <p class="footer-about">Where aesthetic beauty meets effortless utility. We combine premium craftsmanship with premium materials to create furniture that elevates your home and stands the test of time in both style and comfort.</p>
+                    <p class="footer-about">Where aesthetic beauty meets effortless utility. We combine premium
+                        craftsmanship with premium materials to create furniture that elevates your home and stands the
+                        test of time in both style and comfort.</p>
                 </div>
                 <div class="footer-col">
                     <h4 class="footer-col-title">About Us</h4>
@@ -199,7 +189,8 @@
                 </div>
                 <div class="footer-col">
                     <h4 class="footer-col-title">Call Center</h4>
-                    <p class="footer-about">Have a question? Our design experts are ready to assist you with your interior journey.</p>
+                    <p class="footer-about">Have a question? Our design experts are ready to assist you with your
+                        interior journey.</p>
                     <p class="footer-contact">Support Hours: Mon–Sat, 9 AM – 6 PM</p>
                     <p class="footer-contact">hexanroom@gmail.com</p>
                     <p class="footer-contact">+07 81320456</p>
@@ -352,9 +343,15 @@ onMounted(fetchProducts)
     border-bottom: 1px solid rgba(180, 140, 100, .2);
 }
 
-.nav-logo { height: 40px; object-fit: contain; }
+.nav-logo {
+    height: 40px;
+    object-fit: contain;
+}
 
-.nav-links { display: flex; gap: 32px; }
+.nav-links {
+    display: flex;
+    gap: 32px;
+}
 
 .nav-links a {
     font-size: 14px;
@@ -366,7 +363,9 @@ onMounted(fetchProducts)
 }
 
 .nav-links a.active,
-.nav-links a:hover { color: #b85c38; }
+.nav-links a:hover {
+    color: #b85c38;
+}
 
 .nav-links a::after {
     content: '';
@@ -380,12 +379,31 @@ onMounted(fetchProducts)
 }
 
 .nav-links a.active::after,
-.nav-links a:hover::after { width: 100%; }
+.nav-links a:hover::after {
+    width: 100%;
+}
 
-.nav-icons { display: flex; gap: 20px; }
-.nav-icons button { background: none; border: none; cursor: pointer; color: #2b1f14; transition: color .3s; }
-.nav-icons button:hover { color: #b85c38; }
-.nav-icons svg { width: 20px; height: 20px; }
+.nav-icons {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-icons button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #2b1f14;
+    transition: color .3s;
+}
+
+.nav-icons button:hover {
+    color: #b85c38;
+}
+
+.nav-icons svg {
+    width: 20px;
+    height: 20px;
+}
 
 /* PAGE */
 .products-page {
@@ -408,7 +426,11 @@ onMounted(fetchProducts)
     letter-spacing: .04em;
 }
 
-.sort-wrap { display: flex; align-items: center; gap: 10px; }
+.sort-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
 .sort-label {
     font-size: 12px;
@@ -435,7 +457,10 @@ onMounted(fetchProducts)
 }
 
 /* GRID */
-.grid-section { flex: 1; min-width: 0; }
+.grid-section {
+    flex: 1;
+    min-width: 0;
+}
 
 .product-grid {
     display: grid;
@@ -445,13 +470,44 @@ onMounted(fetchProducts)
 }
 
 /* Skeleton */
-.skeleton-card { background: #fff; padding: 0 0 16px; }
-.skeleton-img { width: 100%; aspect-ratio: 4/3; background: linear-gradient(90deg, #ede8e0 25%, #f5f0e8 50%, #ede8e0 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
-.skeleton-line { height: 12px; background: #ede8e0; margin: 10px 16px 6px; border-radius: 4px; animation: shimmer 1.4s infinite; }
-.w-3\/4 { width: 75%; }
-.w-1\/2 { width: 50%; }
+.skeleton-card {
+    background: #fff;
+    padding: 0 0 16px;
+}
 
-@keyframes shimmer { 0% { background-position: 200% 0 } 100% { background-position: -200% 0 } }
+.skeleton-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: linear-gradient(90deg, #ede8e0 25%, #f5f0e8 50%, #ede8e0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+}
+
+.skeleton-line {
+    height: 12px;
+    background: #ede8e0;
+    margin: 10px 16px 6px;
+    border-radius: 4px;
+    animation: shimmer 1.4s infinite;
+}
+
+.w-3\/4 {
+    width: 75%;
+}
+
+.w-1\/2 {
+    width: 50%;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0
+    }
+
+    100% {
+        background-position: -200% 0
+    }
+}
 
 /* Product Card */
 .product-card {
@@ -478,7 +534,9 @@ onMounted(fetchProducts)
     transition: transform .5s ease;
 }
 
-.product-card:hover .card-img { transform: scale(1.06); }
+.product-card:hover .card-img {
+    transform: scale(1.06);
+}
 
 .card-overlay {
     position: absolute;
@@ -491,7 +549,9 @@ onMounted(fetchProducts)
     transition: opacity .3s;
 }
 
-.product-card:hover .card-overlay { opacity: 1; }
+.product-card:hover .card-overlay {
+    opacity: 1;
+}
 
 .btn-quick {
     border: 1px solid #f5ede0;
@@ -505,7 +565,10 @@ onMounted(fetchProducts)
     transition: background .25s, color .25s;
 }
 
-.btn-quick:hover { background: #f5ede0; color: #2b1f14; }
+.btn-quick:hover {
+    background: #f5ede0;
+    color: #2b1f14;
+}
 
 .card-badge {
     position: absolute;
@@ -520,7 +583,9 @@ onMounted(fetchProducts)
     padding: 3px 8px;
 }
 
-.card-body { padding: 12px 14px 16px; }
+.card-body {
+    padding: 12px 14px 16px;
+}
 
 .card-title {
     font-size: 13px;
@@ -532,10 +597,18 @@ onMounted(fetchProducts)
     text-overflow: ellipsis;
 }
 
-.card-stars { margin-bottom: 6px; }
+.card-stars {
+    margin-bottom: 6px;
+}
 
-.star { font-size: 13px; color: #ddd; }
-.star.filled { color: #c9a84c; }
+.star {
+    font-size: 13px;
+    color: #ddd;
+}
+
+.star.filled {
+    color: #c9a84c;
+}
 
 .card-price {
     font-size: 13px;
@@ -567,10 +640,28 @@ onMounted(fetchProducts)
     justify-content: center;
 }
 
-.page-btn:hover { background: #2b1f14; color: #f5ede0; }
-.page-btn.active { background: #2b1f14; color: #f5ede0; border-color: #2b1f14; }
-.page-btn.ellipsis { border: none; cursor: default; }
-.page-btn.view-all { width: auto; padding: 0 14px; font-size: 11px; letter-spacing: .08em; }
+.page-btn:hover {
+    background: #2b1f14;
+    color: #f5ede0;
+}
+
+.page-btn.active {
+    background: #2b1f14;
+    color: #f5ede0;
+    border-color: #2b1f14;
+}
+
+.page-btn.ellipsis {
+    border: none;
+    cursor: default;
+}
+
+.page-btn.view-all {
+    width: auto;
+    padding: 0 14px;
+    font-size: 11px;
+    letter-spacing: .08em;
+}
 
 /* SIDEBAR */
 .sidebar {
@@ -599,7 +690,9 @@ onMounted(fetchProducts)
     background: transparent;
 }
 
-.search-input::placeholder { color: #b8a090; }
+.search-input::placeholder {
+    color: #b8a090;
+}
 
 .search-btn {
     border: none;
@@ -611,9 +704,14 @@ onMounted(fetchProducts)
     align-items: center;
 }
 
-.search-btn svg { width: 16px; height: 16px; }
+.search-btn svg {
+    width: 16px;
+    height: 16px;
+}
 
-.filter-block { margin-bottom: 28px; }
+.filter-block {
+    margin-bottom: 28px;
+}
 
 .filter-title {
     font-size: 13px;
@@ -623,7 +721,11 @@ onMounted(fetchProducts)
     margin-bottom: 14px;
 }
 
-.filter-list { list-style: none; padding: 0; margin: 0; }
+.filter-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 
 .filter-item {
     display: flex;
@@ -635,7 +737,9 @@ onMounted(fetchProducts)
 }
 
 .filter-item:hover .filter-name,
-.filter-item.selected .filter-name { color: #b85c38; }
+.filter-item.selected .filter-name {
+    color: #b85c38;
+}
 
 .filter-name {
     font-size: 12px;
@@ -644,13 +748,16 @@ onMounted(fetchProducts)
     transition: color .2s;
 }
 
-.filter-count { font-size: 11px; color: #b8a090; }
+.filter-count {
+    font-size: 11px;
+    color: #b8a090;
+}
 
 .color-dot {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    border: 1px solid rgba(0,0,0,.12);
+    border: 1px solid rgba(0, 0, 0, .12);
     flex-shrink: 0;
 }
 
@@ -679,7 +786,9 @@ onMounted(fetchProducts)
     transition: background .3s;
 }
 
-.btn-filter:hover { background: #2b1f14; }
+.btn-filter:hover {
+    background: #2b1f14;
+}
 
 /* FOOTER */
 .footer {
@@ -707,7 +816,7 @@ onMounted(fetchProducts)
 .footer-about {
     font-size: 12px;
     font-weight: 300;
-    color: rgba(245,237,224,.5);
+    color: rgba(245, 237, 224, .5);
     line-height: 1.8;
 }
 
@@ -720,44 +829,79 @@ onMounted(fetchProducts)
     margin-bottom: 18px;
 }
 
-.footer-links { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
 
 .footer-links a {
     font-size: 12px;
     font-weight: 300;
-    color: rgba(245,237,224,.5);
+    color: rgba(245, 237, 224, .5);
     text-decoration: none;
     transition: color .3s;
 }
 
-.footer-links a:hover { color: #c9ad93; }
+.footer-links a:hover {
+    color: #c9ad93;
+}
 
 .footer-contact {
     font-size: 12px;
     font-weight: 300;
-    color: rgba(245,237,224,.5);
+    color: rgba(245, 237, 224, .5);
     line-height: 1.9;
     margin-top: 6px;
 }
 
 .footer-bottom {
-    border-top: 1px solid rgba(245,237,224,.08);
+    border-top: 1px solid rgba(245, 237, 224, .08);
     padding-top: 20px;
     text-align: center;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.footer-bottom p { font-size: 11px; color: rgba(245,237,224,.25); letter-spacing: .06em; }
+.footer-bottom p {
+    font-size: 11px;
+    color: rgba(245, 237, 224, .25);
+    letter-spacing: .06em;
+}
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
-    .content-row { flex-direction: column-reverse; }
-    .sidebar { width: 100%; position: static; }
-    .product-grid { grid-template-columns: repeat(2, 1fr); }
-    .footer { padding: 48px 24px 24px; }
-    .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
-    .products-page { padding: 24px 20px 60px; }
-    .nav { padding: 14px 20px; }
+    .content-row {
+        flex-direction: column-reverse;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: static;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer {
+        padding: 48px 24px 24px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+    }
+
+    .products-page {
+        padding: 24px 20px 60px;
+    }
+
+    .nav {
+        padding: 14px 20px;
+    }
 }
 </style>

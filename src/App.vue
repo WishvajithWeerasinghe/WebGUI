@@ -13,7 +13,6 @@
 }
 
 body {
-  cursor: none;
   overflow-x: hidden;
 }
 </style>

@@ -14,6 +14,21 @@ export default defineConfig({
     vueJsx(),
     vueDevTools(),
   ],
+
+
+  server: {
+      // 1. Force the watcher to use polling if standard events fail
+      watch: {
+        usePolling: true,
+        interval: 100, // Check for changes every 100ms
+      },
+      // 2. Ensure the HMR connection is stable
+      hmr: {
+        overlay: true, // Shows errors in the browser overlay
+      }
+    },
+
+
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

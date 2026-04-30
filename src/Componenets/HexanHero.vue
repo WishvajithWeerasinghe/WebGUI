@@ -1,8 +1,4 @@
 <template>
-    <!-- Custom Cursor -->
-    <div id="cursor-dot" :style="{ left: cursorX + 'px', top: cursorY + 'px' }"></div>
-    <div id="cursor-ring" :style="{ left: cursorX + 'px', top: cursorY + 'px' }"></div>
-
     <!-- NAV -->
     <nav>
         <a href="#" class="logo">
@@ -12,18 +8,18 @@
 
         </a>
         <div class="nav-links">
-            <a href="#">Home</a>
-            <RouterLink to="/products">Products</RouterLink>
-            <a href="#">Room</a>
-            <a href="#">About us</a>
+            <a href="javascript:void(0)" @click="navigate('/')">Home</a>
+            <a href="javascript:void(0)" @click="navigate('/products')">Products</a>
+            <a href="javascript:void(0)" @click="navigate('/room')">Room</a>
+            <a href="javascript:void(0)" @click="navigate('/about')">About us</a>
         </div>
         <div class="nav-icons">
-            <button aria-label="Search">
+            <router-link to="/products" class="nav-icon-link" aria-label="Search">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <circle cx="11" cy="11" r="8" />
                     <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
-            </button>
+            </router-link>
             <button aria-label="Cart">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
@@ -176,13 +172,17 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 import logoImg from '@/assets/logo.png'
 
-const cursorX = ref(0)
-const cursorY = ref(0)
+const router = useRouter()
 const mouse = ref({ x: 0, y: 0 })
 const logoUrl = logoImg
+
+function navigate(path) {
+    router.push(path)
+}
 
 function onMouseMove(e) {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -197,8 +197,6 @@ function parallax(sx, sy) {
 }
 
 
-onMounted(() => window.addEventListener('mousemove', updateCursor))
-onUnmounted(() => window.removeEventListener('mousemove', updateCursor))
 </script>
 
 <style scoped>
@@ -217,36 +215,13 @@ onUnmounted(() => window.removeEventListener('mousemove', updateCursor))
     --color-dark: #4D2C19;
     --color-accent: #AF7164;
 
-    --color-text-dark: #2b1f14;
+    --color-text-dark: #4D2C19;
     --color-text-light: #f5ede0;
     --color-glass: rgba(180, 130, 80, 0.25);
 
     /* Fonts */
     --font-main: 'Cormorant Garamond', serif;
     --font-ui: 'Jost', sans-serif;
-}
-
-#cursor-dot {
-    width: 8px;
-    height: 8px;
-    background: var(--color-accent);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-}
-
-#cursor-ring {
-    width: 36px;
-    height: 36px;
-    border: 1.5px solid #b85c38;
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: left .12s ease, top .12s ease;
 }
 
 nav {
@@ -294,7 +269,7 @@ nav {
 .nav-links a {
     font-size: 14px;
     letter-spacing: .06em;
-    color: #2b1f14;
+    color: var(--color-text-dark);
     text-decoration: none;
     position: relative;
     transition: color .3s;
@@ -374,7 +349,7 @@ nav {
     font-family: 'Lato', sans-serif;
     font-size: clamp(36px, 5.5vw, 72px);
     font-weight: 700;
-    color: var(--color-text-dark);
+    color: var(--color-secondary);
     letter-spacing: .03em;
     white-space: nowrap;
     z-index: 10;
