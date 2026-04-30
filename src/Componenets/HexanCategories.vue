@@ -138,7 +138,7 @@
                 <p class="footer-about">Have a question? Our design experts are ready to assist you with your interior
                     journey.</p>
                 <p class="footer-contact">Support Hours: Mon–Sat, 9 AM – 6 PM</p>
-                <p class="footer-contact">hexanroom@gmail.com</p>
+                <p class="footer-contact">hevanroom@gmail.com</p>
                 <p class="footer-contact">+07 81320456</p>
             </div>
         </div>
@@ -153,19 +153,19 @@ const categories = [
     {
         title: 'CHAIRS',
         desc: 'More than just a seat; a signature piece that redefines your daily ritual. Explore our collection.',
-        img: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=800&q=80',
+        img: '/src/assets/home/chair.jpg',
         link: '/products/chairs',
     },
     {
         title: 'TABLES',
         desc: 'From morning rituals to evening conversations, discover a surface built for a lifetime of stories.',
-        img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80',
+        img: '/src/assets/home/table.jpg',
         link: '/products/tables',
     },
     {
         title: 'ROOM ACCESSORIES',
         desc: 'Small additions with a big impact, discover the unique textures and forms that define your personal style.',
-        img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&q=80',
+        img: '/src/assets/home/accessories.jpg',
         link: '/products/accessories',
     },
 ]
@@ -659,6 +659,11 @@ const posts = [
     .category-text {
         max-width: 100%;
         text-align: center;
+
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .category-image-wrap {

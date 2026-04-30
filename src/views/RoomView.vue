@@ -33,7 +33,6 @@
         <!-- BREADCRUMB -->
         <div class="breadcrumb">
             <RouterLink to="/">Home</RouterLink> /
-            <RouterLink to="/room">Blog</RouterLink> /
             <span>Your room with a View</span>
         </div>
 

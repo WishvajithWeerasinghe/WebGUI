@@ -9,10 +9,14 @@
             </p>
         </div>
 
-        <div class="grid grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div class="grid grid-cols-3 gap-12 max-w-6xl mx-auto px-5">
             <div v-for="(product, index) in products" :key="product.name"
                 class="relative group overflow-hidden cursor-pointer transition-transform duration-300 hover:-translate-y-1.5"
-                :class="index === 1 ? 'bg-[#1a5f6a]' : 'bg-white'">
+                :class="[
+                    index === 0 ? 'bg-none' :
+                        index === 1 ? 'bg-none' :
+                            'bg-none'
+                ]">
                 <!-- Badge -->
                 <div v-if="product.badge"
                     class="absolute top-3.5 left-3.5 z-10 bg-[#af7164] text-white text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1">
@@ -20,7 +24,7 @@
                 </div>
 
                 <!-- Image -->
-                <div class="relative aspect-[4/3] overflow-hidden">
+                <div class="relative overflow-hidden">
                     <img :src="product.img" :alt="product.name"
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     <!-- Overlay -->
@@ -34,12 +38,12 @@
                 </div>
 
                 <!-- Info -->
-                <div class="flex items-center justify-between px-4 py-4">
+                <div class="flex flex-col items-center justify-center px-4 py-6 gap-2">
                     <span class="text-sm font-medium tracking-wide"
-                        :class="index === 1 ? 'text-[#e8f4f0]' : 'text-[#2b1f14]'">
+                        :class="index === 1 ? 'text-[#2b1f14]' : 'text-[#2b1f14]'">
                         {{ product.name }}
                     </span>
-                    <span class="text-sm font-light" :class="index === 1 ? 'text-[#e8f4f0]' : 'text-[#7a6050]'">
+                    <span class="text-xs font-light" :class="index === 1 ? 'text-[#2b1f14]' : 'text-[#7a6050]'">
                         {{ product.price }}
                     </span>
                 </div>
@@ -61,43 +65,55 @@
     <section class="showcase-section">
         <div class="showcase-overlay"></div>
         <div class="showcase-content">
-            <p class="showcase-eyebrow">Bring the African Savanna Experience Home</p>
-            <h2 class="showcase-headline">So clearly love your space &amp; find your unique living story.</h2>
-            <button class="btn-find">Find more</button>
+            <p class="showcase-eyebrow">Bring the Hevan Room Experience Home</p>
+            <h2 class="showcase-headline">See exactly how our pieces fit within your unique living space.</h2>
+            <button class="btn-find">View more</button>
         </div>
     </section>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
-// Replace these src values with your actual product images
-const products = [
-    {
-        name: 'Pot',
-        price: '$34.99',
-        badge: 'Sale',
-        img: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=80',
-    },
-    {
-        name: 'Lamp',
-        price: '$73.19',
-        badge: 'New',
-        img: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&q=80',
-    },
-    {
-        name: 'Chair',
-        price: '$417.04',
-        badge: 'Sold',
-        img: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&q=80',
-    },
-]
-
+const products = ref([])
 const hoveredCard = ref(null)
+
+onMounted(async () => {
+    try {
+        const response = await fetch('https://dummyjson.com/products?limit=3')
+        const data = await response.json()
+        products.value = data.products.map((product) => ({
+            name: product.title,
+            price: `$${product.price}`,
+            badge: product.discountPercentage ? 'Sale' : 'New',
+            img: product.thumbnail,
+        }))
+    } catch (error) {
+        console.error('Error fetching products:', error)
+    }
+},)
 </script>
 
 <style scoped>
 /* ─── PRODUCTS SECTION ─── */
+
+:root {
+    /* Colors */
+    --color-primary: #C9AD93;
+    --color-secondary: #823011;
+    --color-dark: #4D2C19;
+    --color-accent: #AF7164;
+
+    --color-text-dark: #4D2C19;
+    --color-tn-dark: #4D2C19;
+    --color-text-light: #f5ede0;
+    --color-glass: rgba(180, 130, 80, 0.25);
+
+    /* Fonts */
+    --font-main: 'Cormorant Garamond', serif;
+    --font-ui: 'Jost', sans-serif;
+}
+
 .products-section {
     background: #faf6f0;
     padding: 90px 64px 80px;
@@ -114,7 +130,7 @@ const hoveredCard = ref(null)
     font-size: clamp(22px, 3vw, 34px);
     font-weight: 700;
     letter-spacing: 0.06em;
-    color: #2b1f14;
+    color: var(--color-tn-dark);
     margin-bottom: 14px;
 }
 
@@ -162,16 +178,15 @@ const hoveredCard = ref(null)
     transform: translateX(4px);
 }
 
-/* ─── SHOWCASE / ROOM BANNER ─── */
+/* ─── ROOM BANNER ─── */
 .showcase-section {
     position: relative;
-    min-height: 520px;
+    min-height: 800px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
 
-    /* Replace with your actual room photo */
-    background-image: url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1600&q=80');
+    background-image: url('E:\3rd Sem\GUI\WebGUI\vue-project\src\assets\home\second.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -189,7 +204,7 @@ const hoveredCard = ref(null)
 .showcase-content {
     position: relative;
     z-index: 5;
-    max-width: 380px;
+    max-width: 300px;
     margin-right: 8%;
     padding: 48px 40px;
     background: rgba(180, 130, 80, 0.2);
@@ -221,6 +236,7 @@ const hoveredCard = ref(null)
 .btn-find {
     display: inline-flex;
     align-items: center;
+    text-align: center;
     gap: 10px;
     border: 1.5px solid #f5ede0;
     color: #f5ede0;

@@ -14,12 +14,12 @@
             <a href="javascript:void(0)" @click="navigate('/about')">About us</a>
         </div>
         <div class="nav-icons">
-            <router-link to="/products" class="nav-icon-link" aria-label="Search">
+            <button aria-label="Search" @click="navigate('/products')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <circle cx="11" cy="11" r="8" />
                     <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
-            </router-link>
+            </button>
             <button aria-label="Cart">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
@@ -42,100 +42,34 @@
         <div class="wall-texture"></div>
         <div class="floor"></div>
 
-        <h1 class="hero-headline">MAKE YOUR SPACE INSPIRING</h1>
+        <h2 class="hero-headline">MAKE YOUR SPACE INSPIRING</h2>
 
         <!-- Pendant Lamp -->
         <div class="floating-item item-pendant" :style="parallax(0.04, 0.03)">
-            <div class="pendant-line"></div>
-            <svg viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <radialGradient id="lg" cx="50%" cy="30%">
-                        <stop offset="0%" stop-color="#f5ede0" />
-                        <stop offset="100%" stop-color="#c09a6a" />
-                    </radialGradient>
-                </defs>
-                <ellipse cx="60" cy="150" rx="50" ry="50" fill="url(#lg)" opacity=".9" />
-                <ellipse cx="60" cy="140" rx="50" ry="20" fill="#a07840" opacity=".4" />
-                <line x1="60" y1="100" x2="60" y2="0" stroke="#2b1f14" stroke-width="2" />
-            </svg>
+            <img src="@/assets/hanging_lamp.png" alt="hanging lamp"
+                style="width: 250px; height: auto; transform: rotate(0deg);">
         </div>
 
-        <!-- Side Table -->
+        <!-- Lamp Table -->
         <div class="floating-item item-sidetable" :style="parallax(0.06, 0.04)">
-            <svg viewBox="0 0 140 180" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="70" cy="38" rx="64" ry="16" fill="#1a1208" />
-                <rect x="56" y="38" width="28" height="110" fill="#2b1f14" rx="4" />
-                <ellipse cx="70" cy="155" rx="48" ry="12" fill="#1a1208" />
-            </svg>
+            <img src="@/assets/lamp_table.png" alt="Lamp Table"
+                style="width: 350px; height: auto; transform: rotate(-15deg);">
         </div>
 
         <!-- Table Lamp -->
         <div class="floating-item item-lamp" :style="parallax(0.07, 0.05)">
-            <svg viewBox="0 0 160 260" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="shade" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#e8d0a8" />
-                        <stop offset="100%" stop-color="#c4a060" />
-                    </linearGradient>
-                    <linearGradient id="base" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#b87c3a" />
-                        <stop offset="100%" stop-color="#7a4e1e" />
-                    </linearGradient>
-                </defs>
-                <path d="M30 80 L10 160 L150 160 L130 80 Z" fill="url(#shade)" stroke="#a07030" stroke-width="1.5" />
-                <ellipse cx="80" cy="80" rx="50" ry="14" fill="#d4b070" />
-                <ellipse cx="80" cy="160" rx="70" ry="16" fill="#b8901a" opacity=".7" />
-                <rect x="72" y="160" width="16" height="60" fill="url(#base)" rx="6" />
-                <ellipse cx="80" cy="220" rx="44" ry="12" fill="#5a3010" />
-                <ellipse cx="80" cy="230" rx="40" ry="8" fill="#3a1e08" />
-            </svg>
+            <img src="@/assets/table_lamp.png" alt="Table Lamp"
+                style="width: 300px; height: auto; transform: rotate(10deg);">
         </div>
 
-        <!-- Bar Stool -->
+        <!-- Stool -->
         <div class="floating-item item-stool" :style="parallax(0.05, 0.04)">
-            <svg viewBox="0 0 100 220" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="stool" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stop-color="#c09a6a" />
-                        <stop offset="100%" stop-color="#906030" />
-                    </linearGradient>
-                </defs>
-                <ellipse cx="50" cy="30" rx="44" ry="14" fill="url(#stool)" />
-                <rect x="44" y="30" width="12" height="130" fill="#a07840" rx="4" />
-                <line x1="20" y1="140" x2="80" y2="140" stroke="#906030" stroke-width="8" stroke-linecap="round" />
-                <line x1="44" y1="160" x2="25" y2="210" stroke="#a07840" stroke-width="8" stroke-linecap="round" />
-                <line x1="56" y1="160" x2="75" y2="210" stroke="#a07840" stroke-width="8" stroke-linecap="round" />
-            </svg>
+            <img src="@/assets/stool.png" alt="Stool" style="width: 200px; height: auto; transform: rotate(10deg);">
         </div>
 
-        <!-- Armchair -->
+        <!-- sofa -->
         <div class="floating-item item-chair" :style="parallax(0.06, 0.05)">
-            <svg viewBox="0 0 220 280" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="fabric" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#c04030" />
-                        <stop offset="50%" stop-color="#a03028" />
-                        <stop offset="100%" stop-color="#802010" />
-                    </linearGradient>
-                </defs>
-                <rect x="20" y="20" width="180" height="160" rx="20" fill="url(#fabric)" />
-                <path d="M40 50 Q80 70 120 50 Q160 30 200 50" stroke="#601008" stroke-width="2" fill="none"
-                    opacity=".5" />
-                <path d="M30 80 Q80 100 130 80 Q175 62 210 80" stroke="#601008" stroke-width="2" fill="none"
-                    opacity=".5" />
-                <path d="M25 110 Q80 130 135 110 Q175 95 215 110" stroke="#601008" stroke-width="2" fill="none"
-                    opacity=".5" />
-                <rect x="10" y="150" width="200" height="60" rx="14" fill="#b03028" />
-                <rect x="0" y="120" width="28" height="90" rx="14" fill="#c04030" />
-                <rect x="192" y="120" width="28" height="90" rx="14" fill="#c04030" />
-                <path d="M30 210 Q25 260 20 270" stroke="#5a3020" stroke-width="10" stroke-linecap="round"
-                    fill="none" />
-                <path d="M190 210 Q195 260 200 270" stroke="#5a3020" stroke-width="10" stroke-linecap="round"
-                    fill="none" />
-                <path d="M65 210 Q62 255 60 268" stroke="#5a3020" stroke-width="8" stroke-linecap="round" fill="none" />
-                <path d="M155 210 Q158 255 160 268" stroke="#5a3020" stroke-width="8" stroke-linecap="round"
-                    fill="none" />
-            </svg>
+            <img src="@/assets/sofa.png" alt="Sofa" style="width: 500px; height: auto; transform: rotate(10deg);">
         </div>
 
         <!-- Copy Block -->
@@ -216,6 +150,7 @@ function parallax(sx, sy) {
     --color-accent: #AF7164;
 
     --color-text-dark: #4D2C19;
+    --color-tn-dark: #4D2C19;
     --color-text-light: #f5ede0;
     --color-glass: rgba(180, 130, 80, 0.25);
 
@@ -347,9 +282,9 @@ nav {
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Lato', sans-serif;
-    font-size: clamp(36px, 5.5vw, 72px);
+    font-size: clamp(30px, 5.5vw, 72px);
     font-weight: 700;
-    color: var(--color-secondary);
+    color: #4a2b11;
     letter-spacing: .03em;
     white-space: nowrap;
     z-index: 10;
@@ -413,21 +348,21 @@ nav {
 }
 
 .item-lamp {
-    bottom: 22%;
-    left: 8%;
+    bottom: 30%;
+    left: 5%;
     width: 160px;
     animation: floatA 5s ease-in-out infinite;
 }
 
 .item-sidetable {
-    bottom: 20%;
-    left: 3%;
+    bottom: -10%;
+    left: 10%;
     width: 140px;
     animation: floatB 6s ease-in-out infinite 1s;
 }
 
 .item-stool {
-    bottom: 18%;
+    bottom: -10%;
     left: 70%;
     width: 100px;
     margin-left: -50px;
@@ -435,8 +370,8 @@ nav {
 }
 
 .item-chair {
-    bottom: 18%;
-    right: 4%;
+    bottom: 15%;
+    right: 12%;
     width: 210px;
     animation: floatB 5.5s ease-in-out infinite 0.8s;
 }
@@ -449,7 +384,7 @@ nav {
 }
 
 .item-pendant {
-    top: 8%;
+    top: 0%;
     left: 43%;
     width: 120px;
     animation: floatA 4s ease-in-out infinite 0.3s;
