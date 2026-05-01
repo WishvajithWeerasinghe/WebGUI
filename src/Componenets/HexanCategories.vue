@@ -23,7 +23,7 @@
     <!-- PROMO BANNER -->
     <section class="promo-banner">
         <span class="promo-text">Grab yours before they're all gone!</span>
-        <button class="promo-btn">
+        <button class="promo-btn" @click="navigate('/products')">
             View store
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="5" y1="12" x2="19" y2="12" />
@@ -58,7 +58,7 @@
                     <span class="blog-cat">{{ post.category }}</span>
                 </div>
                 <h3 class="blog-title">{{ post.title }}</h3>
-                <a href="#" class="blog-read">read more</a>
+                <a :href="post.link" class="blog-read">read more</a>
             </article>
         </div>
     </section>
@@ -77,7 +77,7 @@
                 conscience."
             </blockquote>
             <p class="testimonial-name">Sydney Smith</p>
-            <p class="testimonial-role">Home</p>
+            <p class="testimonial-role">writer</p>
             <div class="testimonial-dots">
                 <span class="dot active"></span>
                 <span class="dot"></span>
@@ -159,7 +159,7 @@ const categories = [
     {
         title: 'TABLES',
         desc: 'From morning rituals to evening conversations, discover a surface built for a lifetime of stories.',
-        img: '/src/assets/home/table.jpg',
+        img: '/src/assets/home/table.webp',
         link: '/products/tables',
     },
     {
@@ -198,13 +198,15 @@ const posts = [
         date: 'March 28, 2024',
         category: 'Pro Design',
         title: 'What Will Our Interiors of the Future Look — and Feel — Like?',
-        img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80',
+        img: '/src/assets/home/bottom1.webp',
+        link: 'https://www.architecturaldigest.com/story/interiors-of-the-future-look-feel-like',
     },
     {
         date: 'November 13, 2023',
         category: 'Interior Design',
         title: 'Furnish Your Home Like a Pro!',
-        img: 'https://images.unsplash.com/photo-1616047006789-b7af5afb8c20?w=800&q=80',
+        img: '/src/assets/home/bottom2.webp',
+        link: 'https://www.bradens.com/blogs/storied-by-bradens-furniture/interiors-of-the-future',
     },
 ]
 </script>
@@ -212,18 +214,24 @@ const posts = [
 <style scoped>
 /* ─── CATEGORIES ─── */
 .categories-section {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
     background: #faf6f0;
     padding: 80px 0;
-    font-family: 'Jost', sans-serif;
+    font-family: var(--font-lato);
+    align-items: center;
 }
 
 .category-row {
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
     min-height: 380px;
-    padding: 0 80px;
+    padding: 0 50px;
     gap: 80px;
-    margin-bottom: 40px;
 }
 
 .row-normal {
@@ -236,12 +244,16 @@ const posts = [
 
 .category-text {
     flex: 1;
-    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 500px;
 }
 
 .category-title {
-    font-family: 'Lato', sans-serif;
+    font-family: var(--font-lato);
     font-size: clamp(22px, 2.8vw, 36px);
+    text-align: center;
     font-weight: 700;
     letter-spacing: 0.1em;
     color: #2b1f14;
@@ -266,7 +278,7 @@ const posts = [
     background: transparent;
     padding: 11px 28px;
     font-size: 13px;
-    font-family: 'Jost', sans-serif;
+    font-family: var(--font-lato);
     letter-spacing: 0.1em;
     cursor: pointer;
     transition: background 0.3s, color 0.3s;
@@ -291,6 +303,7 @@ const posts = [
     flex: 1;
     max-width: 520px;
     overflow: hidden;
+    justify-content: center;
 }
 
 .category-img {
@@ -313,7 +326,7 @@ const posts = [
     justify-content: center;
     gap: 48px;
     padding: 24px 48px;
-    font-family: 'Jost', sans-serif;
+    font-family: var(--font-lato);
 }
 
 .promo-text {
@@ -489,7 +502,7 @@ const posts = [
 }
 
 .quote-mark {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-lato);
     font-size: 90px;
     line-height: 0.5;
     color: rgba(245, 237, 224, 0.35);
@@ -498,8 +511,8 @@ const posts = [
 }
 
 .testimonial-quote {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(17px, 2vw, 22px);
+    font-family: var(--font-lateef);
+    font-size: clamp(30px, 2vw, 22px);
     font-style: italic;
     font-weight: 400;
     color: #f5ede0;

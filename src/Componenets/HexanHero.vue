@@ -20,14 +20,14 @@
                     <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
             </button>
-            <button aria-label="Cart">
+            <button aria-label="Cart" @click="$router.push('/shipping')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
                     <line x1="3" y1="6" x2="21" y2="6" />
                     <path d="M16 10a4 4 0 01-8 0" />
                 </svg>
             </button>
-            <button aria-label="Menu">
+            <button aria-label="Menu" @click="menuDrawerRef.openMenu()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <line x1="3" y1="6" x2="21" y2="6" />
                     <line x1="3" y1="12" x2="21" y2="12" />
@@ -75,7 +75,7 @@
         <!-- Copy Block -->
         <div class="hero-copy">
             <p>Your space shapes your mindset. Design a room<br>that makes your next big idea feel inevitable.</p>
-            <button class="btn-view">
+            <button class="btn-view" @click="navigate('/room')">
                 View more
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="5" y1="12" x2="19" y2="12" />
@@ -102,17 +102,21 @@
             <div class="scroll-line"></div>
         </div>
     </section>
+
+    <MenuDrawer ref="menuDrawerRef" />
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import MenuDrawer from '@/Componenets/MenuDrawer.vue'
 
 import logoImg from '@/assets/logo.png'
 
 const router = useRouter()
 const mouse = ref({ x: 0, y: 0 })
 const logoUrl = logoImg
+const menuDrawerRef = ref(null)
 
 function navigate(path) {
     router.push(path)

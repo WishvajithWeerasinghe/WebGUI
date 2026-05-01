@@ -51,7 +51,7 @@
         </div>
 
         <div class="products-cta">
-            <button class="btn-all">
+            <button class="btn-all" @click="navigate('/products')">
                 View all products
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="5" y1="12" x2="19" y2="12" />
@@ -67,16 +67,22 @@
         <div class="showcase-content">
             <p class="showcase-eyebrow">Bring the Hevan Room Experience Home</p>
             <h2 class="showcase-headline">See exactly how our pieces fit within your unique living space.</h2>
-            <button class="btn-find">View more</button>
+            <button class="btn-find" @click="navigate('/rooms')">View more</button>
         </div>
     </section>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const products = ref([])
 const hoveredCard = ref(null)
+
+function navigate(path) {
+    router.push(path)
+}
 
 onMounted(async () => {
     try {
@@ -186,7 +192,7 @@ onMounted(async () => {
     align-items: center;
     justify-content: flex-end;
 
-    background-image: url('E:\3rd Sem\GUI\WebGUI\vue-project\src\assets\home\second.jpg');
+    background-image: url('/src/assets/home/second.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -211,12 +217,17 @@ onMounted(async () => {
     backdrop-filter: blur(6px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .showcase-eyebrow {
-    font-family: 'Jost', sans-serif;
-    font-size: 11px;
+    font-family: var(--font-lato);
+    font-size: 15px;
     font-weight: 400;
+    text-align: center;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: #c9ad93;
@@ -224,9 +235,10 @@ onMounted(async () => {
 }
 
 .showcase-headline {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-lato);
     font-size: clamp(20px, 2.5vw, 28px);
     font-weight: 500;
+    text-align: center;
     line-height: 1.55;
     color: #f5ede0;
     margin-bottom: 28px;
@@ -236,7 +248,7 @@ onMounted(async () => {
 .btn-find {
     display: inline-flex;
     align-items: center;
-    text-align: center;
+    justify-content: center;
     gap: 10px;
     border: 1.5px solid #f5ede0;
     color: #f5ede0;

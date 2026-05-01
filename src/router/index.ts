@@ -4,6 +4,7 @@ import ProductsView from '@/views/ProductsView.vue'
 import ProductDetailView from '@/views/ProductDetailView.vue'
 import AboutView from '@/views/AboutView.vue'
 import RoomView from '@/views/RoomView.vue'
+import ShippingView from '@/views/ShippingView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,10 @@ const router = createRouter({
     { path: '/room', 
       name: 'room', 
       component: RoomView 
+    },
+    { path: '/shipping', 
+      name: 'shipping', 
+      component: ShippingView 
     },
   ],
 })

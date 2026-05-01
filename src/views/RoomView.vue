@@ -17,12 +17,14 @@
                         <circle cx="11" cy="11" r="8" />
                         <line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg></button>
-                <button aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <button aria-label="Cart" @click="$router.push('/shipping')"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.8">
                         <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
                         <line x1="3" y1="6" x2="21" y2="6" />
                         <path d="M16 10a4 4 0 01-8 0" />
                     </svg></button>
-                <button aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <button aria-label="Menu" @click="menuDrawerRef.openMenu()"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.8">
                         <line x1="3" y1="6" x2="21" y2="6" />
                         <line x1="3" y1="12" x2="21" y2="12" />
                         <line x1="3" y1="18" x2="21" y2="18" />
@@ -132,7 +134,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn-place-order">
+                        <button class="btn-place-order" @click="$router.push('/shipping')">
                             PLACE ORDER →
                         </button>
                     </div>
@@ -256,12 +258,16 @@
             </div>
         </footer>
     </div>
+
+    <MenuDrawer ref="menuDrawerRef" />
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import MenuDrawer from '@/Componenets/MenuDrawer.vue'
 
-// --- State ---
+const menuDrawerRef = ref(null)
+
 const roomImage = ref(null)
 const roomImageBase64 = ref(null)
 const placedItems = ref([])
