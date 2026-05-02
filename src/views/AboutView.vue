@@ -202,7 +202,7 @@ const skills = [
 
 async function fetchFeatured() {
     try {
-        const res = await fetch('https://dummyjson.com/products?limit=3&skip=0&sortBy=rating&order=desc')
+        const res = await fetch('https://dummyjson.com/products/category/furniture?limit=3&sortBy=rating&order=desc')
         const data = await res.json()
         featuredProducts.value = data.products
     } catch (e) {

@@ -440,7 +440,7 @@ async function analyzeRoom() {
 // --- Fetch Products ---
 async function fetchProducts() {
     try {
-        const res = await fetch('https://dummyjson.com/products?limit=6&skip=0')
+        const res = await fetch('https://dummyjson.com/products/category/furniture?limit=6&skip=0')
         const data = await res.json()
         shopProducts.value = data.products
     } catch (e) {

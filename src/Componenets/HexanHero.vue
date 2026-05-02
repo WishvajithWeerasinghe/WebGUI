@@ -75,7 +75,7 @@
         <!-- Copy Block -->
         <div class="hero-copy">
             <p>Your space shapes your mindset. Design a room<br>that makes your next big idea feel inevitable.</p>
-            <button class="btn-view" @click="navigate('/room')">
+            <button class="btn-view" @click="navigate('/products')">
                 View more
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="5" y1="12" x2="19" y2="12" />

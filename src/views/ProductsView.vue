@@ -56,7 +56,6 @@
             <div class="content-row">
                 <!-- PRODUCT GRID -->
                 <section class="grid-section">
-                    <!-- Skeleton -->
                     <div v-if="loading" class="product-grid">
                         <div v-for="n in 9" :key="n" class="skeleton-card">
                             <div class="skeleton-img"></div>
@@ -224,21 +223,21 @@ const maxPrice = ref(2000)
 
 // Sidebar static data
 const categories = [
-    { slug: 'ceiling', label: 'Ceiling', count: 20 },
-    { slug: 'floor', label: 'Floor', count: 24 },
-    { slug: 'led', label: 'Led', count: 20 },
-    { slug: 'modern', label: 'Modern', count: 33 },
-    { slug: 'retro', label: 'Retro', count: 33 },
-    { slug: 'wood', label: 'Wood', count: 29 },
+    { slug: 'chair', label: 'Chairs', count: 20 },
+    { slug: 'bed', label: 'Beds', count: 24 },
+    { slug: 'table', label: 'Tables', count: 20 },
+    { slug: 'tablelamps', label: 'Table Lamps', count: 33 },
+    { slug: 'vases&pots', label: 'Vases & Pots', count: 33 },
+    { slug: 'Other', label: 'Other', count: 29 },
 ]
 
 const colors = [
-    { name: 'Black', hex: '#1a1a1a', count: 33 },
-    { name: 'Blue', hex: '#4a6fa5', count: 35 },
-    { name: 'Red', hex: '#c0392b', count: 24 },
-    { name: 'Green', hex: '#7a9e7e', count: 24 },
-    { name: 'Yellow', hex: '#d4a843', count: 22 },
-    { name: 'Grey', hex: '#9e9e9e', count: 31 },
+    { name: 'Beige', hex: '#d4b896', count: 12 },
+    { name: 'Brown', hex: '#8b4513', count: 18 },
+    { name: 'White', hex: '#f5f0e8', count: 15 },
+    { name: 'Black', hex: '#1a1a1a', count: 9 },
+    { name: 'Grey', hex: '#9e9e9e', count: 11 },
+    { name: 'Walnut', hex: '#5c3317', count: 8 },
 ]
 
 // Pagination
@@ -273,7 +272,7 @@ async function fetchProducts() {
         } else if (selectedCategory.value) {
             url = `https://dummyjson.com/products/category/${selectedCategory.value}?limit=${perPage}&skip=${skip}`
         } else {
-            url = `https://dummyjson.com/products?limit=${perPage}&skip=${skip}`
+            url = `https://dummyjson.com/products/category/furniture?limit=${perPage}&skip=${skip}`
         }
 
         // Sorting
@@ -285,7 +284,14 @@ async function fetchProducts() {
         const data = await res.json()
 
         // Apply client-side price filter
-        const filtered = data.products.filter(p => p.price <= maxPrice.value)
+        // AFTER
+        const filtered = data.products.filter(p => {
+            const matchesPrice = p.price <= maxPrice.value
+            const matchesColor = !selectedColor.value ||
+                p.title.toLowerCase().includes(selectedColor.value.toLowerCase()) ||
+                p.description.toLowerCase().includes(selectedColor.value.toLowerCase())
+            return matchesPrice && matchesColor
+        })
         products.value = filtered
         total.value = data.total
 
@@ -317,6 +323,8 @@ function selectCategory(slug) {
 
 function selectColor(name) {
     selectedColor.value = selectedColor.value === name ? '' : name
+    currentPage.value = 1
+    fetchProducts()
 }
 
 function applyFilters() {

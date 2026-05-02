@@ -242,7 +242,7 @@ async function fetchProduct(id) {
         const res = await fetch(`https://dummyjson.com/products/${id}`)
         product.value = await res.json()
 
-        const relRes = await fetch(`https://dummyjson.com/products/category/${product.value.category}?limit=8`)
+        const relRes = await fetch(`https://dummyjson.com/products/category/furniture?limit=8`)
         const relData = await relRes.json()
         related.value = relData.products.filter(p => p.id !== product.value.id).slice(0, 4)
     } catch (e) {
