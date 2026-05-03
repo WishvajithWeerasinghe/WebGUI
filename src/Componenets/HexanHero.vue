@@ -20,12 +20,13 @@
                     <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
             </button>
-            <button aria-label="Cart" @click="$router.push('/shipping')">
+            <button aria-label="Cart" @click="$router.push('/shipping')" style="position:relative">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
                     <line x1="3" y1="6" x2="21" y2="6" />
                     <path d="M16 10a4 4 0 01-8 0" />
                 </svg>
+                <span v-if="cart.totalItems > 0" class="cart-badge">{{ cart.totalItems }}</span>
             </button>
             <button aria-label="Menu" @click="menuDrawerRef.openMenu()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -75,7 +76,7 @@
         <!-- Copy Block -->
         <div class="hero-copy">
             <p>Your space shapes your mindset. Design a room<br>that makes your next big idea feel inevitable.</p>
-            <button class="btn-view" @click="navigate('/products')">
+            <button class="herobtn-view" @click="navigate('/products')">
                 View more
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="5" y1="12" x2="19" y2="12" />
@@ -110,8 +111,10 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import MenuDrawer from '@/Componenets/MenuDrawer.vue'
-
 import logoImg from '@/assets/logo.png'
+import { useCartStore } from '@/stores/cartStore'
+
+const cart = useCartStore()
 
 const router = useRouter()
 const mouse = ref({ x: 0, y: 0 })
@@ -318,7 +321,7 @@ nav {
     margin-bottom: 22px;
 }
 
-.btn-view {
+.herobtn-view {
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -331,9 +334,16 @@ nav {
     letter-spacing: .12em;
     cursor: pointer;
     transition: background .3s, color .3s;
+    white-space: nowrap;
 }
 
-.btn-view:hover {
+.herobtn-view svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.herobtn-view:hover {
     background: #f5ede0;
     color: #2b1f14;
 }

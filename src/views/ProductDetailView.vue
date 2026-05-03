@@ -18,12 +18,13 @@
                         <line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg>
                 </button>
-                <button aria-label="Cart" @click="$router.push('/shipping')">
+                <button aria-label="Cart" @click="$router.push('/shipping')" style="position:relative">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
                         <line x1="3" y1="6" x2="21" y2="6" />
                         <path d="M16 10a4 4 0 01-8 0" />
                     </svg>
+                    <span v-if="cart.totalItems > 0" class="cart-badge">{{ cart.totalItems }}</span>
                 </button>
                 <button aria-label="Menu" @click="menuDrawerRef.openMenu()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -89,7 +90,7 @@
                             <span class="qty-val">{{ qty }}</span>
                             <button class="qty-btn" @click="qty++">+</button>
                         </div>
-                        <button class="btn-cart" @click="addedToCart = true">
+                        <button class="btn-cart" @click="addToCart">
                             {{ addedToCart ? '✓ Added!' : 'Add to cart' }}
                         </button>
                     </div>
@@ -219,6 +220,9 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import MenuDrawer from '@/Componenets/MenuDrawer.vue'
+import { useCartStore } from '@/stores/cartStore'
+
+const cart = useCartStore()
 
 const menuDrawerRef = ref(null)
 
@@ -250,6 +254,20 @@ async function fetchProduct(id) {
     } finally {
         loading.value = false
     }
+
+    function addToCart() {
+        for (let i = 0; i < qty.value; i++) {
+            cart.addItem(product.value)
+        }
+        addedToCart.value = true
+    }
+}
+
+function addToCart() {
+    for (let i = 0; i < qty.value; i++) {
+        cart.addItem(product.value)
+    }
+    addedToCart.value = true
 }
 
 onMounted(() => fetchProduct(route.params.id))

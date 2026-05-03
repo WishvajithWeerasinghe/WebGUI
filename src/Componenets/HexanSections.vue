@@ -40,10 +40,10 @@
                 <!-- Info -->
                 <div class="flex flex-col items-center justify-center px-4 py-6 gap-2">
                     <span class="text-sm font-medium tracking-wide"
-                        :class="index === 1 ? 'text-[#2b1f14]' : 'text-[#2b1f14]'">
+                        :class="index === 1 ? 'text-[#7a6050]' : 'text-[#7a6050]'">
                         {{ product.name }}
                     </span>
-                    <span class="text-xs font-light" :class="index === 1 ? 'text-[#2b1f14]' : 'text-[#7a6050]'">
+                    <span class="text-xs font-light" :class="index === 1 ? 'text-[#7a6050]' : 'text-[#7a6050]'">
                         {{ product.price }}
                     </span>
                 </div>
@@ -66,8 +66,8 @@
         <div class="showcase-overlay"></div>
         <div class="showcase-content">
             <p class="showcase-eyebrow">Bring the Hevan Room Experience Home</p>
-            <h2 class="showcase-headline">See exactly how our pieces fit within your unique living space.</h2>
-            <button class="btn-find" @click="navigate('/rooms')">View more</button>
+            <p class="showcase-headline">See exactly how our pieces fit within your unique living space.</p>
+            <button class="btn-find" @click="navigate('/room')">View more</button>
         </div>
     </section>
 </template>

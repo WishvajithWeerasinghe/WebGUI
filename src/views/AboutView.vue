@@ -18,12 +18,13 @@
                         <line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg>
                 </button>
-                <button aria-label="Cart" @click="$router.push('/shipping')">
+                <button aria-label="Cart" @click="$router.push('/shipping')" style="position:relative">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
                         <line x1="3" y1="6" x2="21" y2="6" />
                         <path d="M16 10a4 4 0 01-8 0" />
                     </svg>
+                    <span v-if="cart.totalItems > 0" class="cart-badge">{{ cart.totalItems }}</span>
                 </button>
                 <button aria-label="Menu" @click="menuDrawerRef.openMenu()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -37,8 +38,7 @@
 
         <!-- HERO -->
         <section class="hero-section">
-            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1400&q=80" alt="About us hero"
-                class="hero-img" />
+            <img src="@/assets/about/aboutbg.jpg" alt="About us hero" class="hero-img" />
             <div class="hero-overlay"></div>
             <h1 class="hero-title">About us</h1>
         </section>
@@ -58,8 +58,7 @@
 
         <!-- FULL WIDTH BANNER -->
         <section class="banner-section">
-            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80" alt="Lamps banner"
-                class="banner-img" />
+            <img src="@/assets/about/lights.jpg" alt="Lamps banner" class="banner-img" />
             <div class="banner-overlay"></div>
         </section>
 
@@ -166,6 +165,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import MenuDrawer from '@/Componenets/MenuDrawer.vue'
+import { useCartStore } from '@/stores/cartStore'
+
+const cart = useCartStore()
 
 const menuDrawerRef = ref(null)
 const animated = ref(false)

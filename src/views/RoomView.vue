@@ -17,12 +17,14 @@
                         <circle cx="11" cy="11" r="8" />
                         <line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg></button>
-                <button aria-label="Cart" @click="$router.push('/shipping')"><svg viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="1.8">
+                <button aria-label="Cart" @click="$router.push('/shipping')" style="position:relative">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
                         <line x1="3" y1="6" x2="21" y2="6" />
                         <path d="M16 10a4 4 0 01-8 0" />
-                    </svg></button>
+                    </svg>
+                    <span v-if="cart.totalItems > 0" class="cart-badge">{{ cart.totalItems }}</span>
+                </button>
                 <button aria-label="Menu" @click="menuDrawerRef.openMenu()"><svg viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="1.8">
                         <line x1="3" y1="6" x2="21" y2="6" />
@@ -132,11 +134,10 @@
                                     <p class="order-name">{{ item.title }}</p>
                                     <p class="order-price">${{ item.price }}</p>
                                 </div>
+                                <button class="order-remove" @click="removePlacedItem(item.id)">×</button>
                             </div>
                         </div>
-                        <button class="btn-place-order" @click="$router.push('/shipping')">
-                            PLACE ORDER →
-                        </button>
+                        <button class="btn-place-order" @click="placeOrder">PLACE ORDER →</button>
                     </div>
                 </div>
 
@@ -186,8 +187,10 @@
                 <div class="sidebar-post">
                     <h4 class="sidebar-post-title">Furnish Your Home Like a Prof</h4>
                     <div class="sidebar-post-img-wrap">
-                        <img src="https://images.unsplash.com/photo-1616047006789-b7af5afb8c20?w=400&q=80" alt="blog"
-                            class="sidebar-post-img" />
+                        <a href="https://www.greenhousestudio.co/home-garden/how-to-design-room" target="_blank">
+                            <img src="https://images.unsplash.com/photo-1616047006789-b7af5afb8c20?w=400&q=80"
+                                alt="blog" class="sidebar-post-img" />
+                        </a>
                     </div>
                     <p class="sidebar-post-desc">We are passionate about living design, determined to making the home
                         that everyone "has dreamed." Well, finally we created the range of things, the ultimate guide to
@@ -198,7 +201,8 @@
                 <div class="sidebar-cat">
                     <h4 class="sidebar-cat-title">Category</h4>
                     <ul class="sidebar-cat-list">
-                        <li v-for="cat in sidebarCats" :key="cat.label" class="sidebar-cat-item">
+                        <li v-for="cat in sidebarCats" :key="cat.label" class="sidebar-cat-item"
+                            :class="{ selected: selectedSidebarCat === cat.slug }" @click="filterByCategory(cat.slug)">
                             <span>{{ cat.label }}</span>
                             <span class="cat-count">({{ cat.count }})</span>
                         </li>
@@ -265,7 +269,11 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import MenuDrawer from '@/Componenets/MenuDrawer.vue'
+import { useCartStore } from '@/stores/cartStore'
+import { useRouter } from 'vue-router'
 
+const cart = useCartStore()
+const router = useRouter()
 const menuDrawerRef = ref(null)
 
 const roomImage = ref(null)
@@ -285,13 +293,15 @@ let uidCounter = 0
 const comment = ref({ text: '', name: '', email: '', website: '', save: false })
 
 const sidebarCats = [
-    { label: 'Ceiling', count: 21 },
-    { label: 'Floor', count: 24 },
-    { label: 'Led', count: 20 },
-    { label: 'Modern', count: 33 },
-    { label: 'Retro', count: 33 },
-    { label: 'Wood', count: 28 },
+    { label: 'All Furniture', slug: '', count: 21 },
+    { label: 'Sofas', slug: 'sofas', count: 20 },
+    { label: 'Bedroom', slug: 'bedroom-furniture', count: 20 },
+    { label: 'Tables', slug: 'tables', count: 18 },
+    { label: 'Lighting', slug: 'lighting', count: 16 },
+    { label: 'Decoration', slug: 'home-decoration', count: 28 },
 ]
+
+const selectedSidebarCat = ref('')
 
 // --- Computed ---
 const uniquePlacedItems = computed(() => {
@@ -351,6 +361,15 @@ function addToCanvas(product) {
         y: 20 + (placedItems.value.length * 20) % 150,
         w: 120,
     })
+}
+
+function placeOrder() {
+    uniquePlacedItems.value.forEach(item => cart.addItem(item))
+    router.push('/shipping')
+}
+
+function removePlacedItem(id) {
+    placedItems.value = placedItems.value.filter(i => i.id !== id)
 }
 
 // --- Drag placed items ---
@@ -440,9 +459,38 @@ async function analyzeRoom() {
 // --- Fetch Products ---
 async function fetchProducts() {
     try {
-        const res = await fetch('https://dummyjson.com/products/category/furniture?limit=6&skip=0')
-        const data = await res.json()
-        shopProducts.value = data.products
+        const categories = ['furniture', 'sofas', 'bedroom-furniture', 'lighting', 'home-decoration']
+        const results = await Promise.all(
+            categories.map(cat =>
+                fetch(`https://dummyjson.com/products/category/${cat}?limit=4`).then(r => r.json())
+            )
+        )
+        shopProducts.value = results.flatMap(d => d.products).slice(0, 12)
+    } catch (e) {
+        console.error(e)
+    } finally {
+        loadingProducts.value = false
+    }
+}
+
+async function filterByCategory(slug) {
+    selectedSidebarCat.value = slug
+    loadingProducts.value = true
+    try {
+        if (!slug) {
+            // show all — use multi-category fetch
+            const categories = ['furniture', 'sofas', 'bedroom-furniture', 'lighting', 'home-decoration']
+            const results = await Promise.all(
+                categories.map(cat =>
+                    fetch(`https://dummyjson.com/products/category/${cat}?limit=4`).then(r => r.json())
+                )
+            )
+            shopProducts.value = results.flatMap(d => d.products).slice(0, 12)
+        } else {
+            const res = await fetch(`https://dummyjson.com/products/category/${slug}?limit=12`)
+            const data = await res.json()
+            shopProducts.value = data.products
+        }
     } catch (e) {
         console.error(e)
     } finally {
@@ -612,6 +660,7 @@ onUnmounted(() => window.removeEventListener('mouseup', onMouseUp))
     margin-bottom: 10px;
     border: 1px solid rgba(180, 140, 100, .2);
     user-select: none;
+    resize: vertical;
 }
 
 .room-bg {
@@ -840,7 +889,7 @@ onUnmounted(() => window.removeEventListener('mouseup', onMouseUp))
 }
 
 .inv-card {
-    background: #fff;
+    background: var(--bg-card2) !important;
     cursor: grab;
     border: 1.5px solid transparent;
     transition: border-color .2s, transform .2s;
@@ -943,6 +992,23 @@ onUnmounted(() => window.removeEventListener('mouseup', onMouseUp))
     display: flex;
     align-items: center;
     gap: 12px;
+}
+
+.order-remove {
+    background: transparent;
+    border: none;
+    color: #a09080;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    margin-left: auto;
+    transition: color .2s;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.order-remove:hover {
+    color: #b85c38;
 }
 
 .order-thumb {
@@ -1090,7 +1156,9 @@ onUnmounted(() => window.removeEventListener('mouseup', onMouseUp))
 }
 
 /* SIDEBAR */
-.sidebar {}
+.sidebar {
+    background: transparent !important;
+}
 
 .sidebar-search {
     display: flex;
@@ -1107,7 +1175,7 @@ onUnmounted(() => window.removeEventListener('mouseup', onMouseUp))
     font-size: 12px;
     font-family: 'Jost', sans-serif;
     color: #2b1f14;
-    background: transparent;
+    background: transparent !important;
 }
 
 .sidebar-input::placeholder {
@@ -1126,6 +1194,7 @@ onUnmounted(() => window.removeEventListener('mouseup', onMouseUp))
 
 .sidebar-post {
     margin-bottom: 28px;
+    background: transparent !important;
 }
 
 .sidebar-post-title {
@@ -1182,14 +1251,19 @@ onUnmounted(() => window.removeEventListener('mouseup', onMouseUp))
     justify-content: space-between;
     padding: 6px 0;
     font-size: 12px;
-    color: #2b1f14;
+    color: #7a6050 !important;
     border-bottom: 1px solid rgba(180, 140, 100, .1);
     cursor: pointer;
     transition: color .2s;
 }
 
 .sidebar-cat-item:hover {
-    color: #b85c38;
+    color: var(--accent);
+}
+
+.sidebar-cat-item.selected {
+    color: var(--accent) !important;
+    font-weight: 500;
 }
 
 .cat-count {

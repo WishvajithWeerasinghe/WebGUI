@@ -50,14 +50,14 @@
         <div class="blog-grid">
             <article class="blog-card" v-for="post in posts" :key="post.title">
                 <div class="blog-img-wrap">
-                    <img :src="post.img" :alt="post.title" class="blog-img" />
+                    <img :src="post.img" :href="post.link" :alt="post.title" class="blog-img" />
                 </div>
                 <div class="blog-meta">
                     <span class="blog-date">{{ post.date }}</span>
                     <span class="blog-sep">·</span>
                     <span class="blog-cat">{{ post.category }}</span>
                 </div>
-                <h3 class="blog-title">{{ post.title }}</h3>
+                <h3 :href="post.link" class="blog-title">{{ post.title }}</h3>
                 <a :href="post.link" class="blog-read">read more</a>
             </article>
         </div>

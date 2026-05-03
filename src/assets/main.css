@@ -1,9 +1,221 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Lateef&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --font-lateef: 'Lateef', serif;
-  --font-lato: 'Lato', sans-serif;  
+/* ─── LIGHT MODE (default) ─── */
+:root,
+[data-theme="light"] {
+    --font-lateef: 'Lateef', serif;
+    --font-lato: 'Lato', sans-serif;
+
+    --bg-primary: #faf6f0;
+    --bg-secondary: #f0ebe3;
+    --bg-card: #ffffff;
+    --bg-card2: #ffffff;
+    --bg-nav: rgba(232, 217, 196, 0.92);
+    --bg-footer: #1a1208;
+
+    --text-primary: #2b1f14;
+    --text-secondary: #7a6050;
+    --text-muted: #a09080;
+    --text-light: #f5ede0;
+
+    --border-color: rgba(180, 140, 100, 0.3);
+    --border-hover: #b85c38;
+
+    --accent: #b85c38;
+    --accent-dark: #8b3a20;
+    --accent-light: #c9ad93;
+
+    --shadow: rgba(80, 40, 10, 0.1);
 }
+
+/* ─── DARK MODE ─── */
+[data-theme="dark"] {
+    --font-lateef: 'Lateef', serif;
+    --font-lato: 'Lato', sans-serif;
+
+    --bg-primary: #1a1208;
+    --bg-secondary: #2b1f14;
+    --bg-card: #231810;
+    --bg-card2: #8a7060;
+    --bg-nav: rgba(26, 18, 8, 0.95);
+    --bg-footer: #0d0904;
+
+    --text-primary: #f5ede0;
+    --text-secondary: #c9ad93;
+    --text-muted: #8a7060;
+    --text-light: #f5ede0;
+
+    --border-color: rgba(180, 140, 100, 0.15);
+    --border-hover: #c9ad93;
+
+    --accent: #c9ad93;
+    --accent-dark: #b85c38;
+    --accent-light: #8a7060;
+
+    --shadow: rgba(0, 0, 0, 0.4);
+}
+
+/* ─── GLOBAL STYLES ─── */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+
+/* Nav */
+nav {
+    background: var(--bg-nav) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+nav a, nav button {
+    color: var(--text-primary) !important;
+}
+
+nav a:hover, nav button:hover {
+    color: var(--accent) !important;
+}
+
+/* Cards */
+.op-card,
+.rel-card,
+.inv-card,
+.order-summary,
+.sidebar {
+    background: var(--bg-card) !important;
+}
+
+.product-card {
+    background: var(--bg-card2) !important;
+}
+
+/* Section backgrounds */
+.products-section,
+.categories-section,
+.features-section,
+.blog-section,
+.our-products-section,
+.related-section,
+.tabs-section,
+.page-wrapper,
+.products-page {
+    background: var(--bg-primary) !important;
+}
+
+/* Text */
+.product-title,
+.category-title,
+.page-title,
+.blog-title,
+.related-title,
+.section-title,
+.card-title,
+.rel-name,
+.op-title,
+.inv-name,
+.item-name,
+.card-name,
+h1, h2, h3, h4 {
+    color: var(--text-primary) !important;
+}
+
+.category-desc,
+.product-desc,
+.blog-date,
+.feature-desc,
+.footer-about,
+.card-price,
+.inv-cat,
+.inv-price,
+.result-count,
+.breadcrumb {
+    color: var(--text-secondary) !important;
+}
+
+.footer-logo {
+    color: #f5ede0 !important;
+}
+
+.footer-col-title {
+    color: #c9ad93 !important;
+}
+
+/* Inputs */
+input, select, textarea {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+input::placeholder, textarea::placeholder {
+    color: var(--text-muted) !important;
+}
+
+/* Buttons */
+.btn-view,
+.btn-all,
+.btn-back {
+    border-color: var(--text-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+.btn-view:hover,
+.btn-all:hover {
+    background: var(--text-primary) !important;
+    color: var(--bg-primary) !important;
+}
+
+/* Borders */
+.filter-block,
+.meta-block,
+.totals,
+.blog-nav,
+.tabs-header {
+    border-color: var(--border-color) !important;
+}
+
+/* Promo banner stays the same in both modes */
+.promo-banner {
+    background: #b07060 !important;
+}
+
+/* Testimonial stays same */
+.testimonial-section {
+    background: #9e6050 !important;
+}
+
+/* Footer always dark */
+.footer {
+    background: var(--bg-footer) !important;
+}
+
+/* Auth modal */
+.auth-modal,
+.menu-drawer {
+    background: var(--bg-primary) !important;
+}
+
+.drawer-link,
+.drawer-action-btn {
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--accent-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }

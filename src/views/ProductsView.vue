@@ -18,12 +18,13 @@
                         <line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg>
                 </button>
-                <button aria-label="Cart" @click="$router.push('/shipping')">
+                <button aria-label="Cart" @click="$router.push('/shipping')" style="position:relative">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
                         <line x1="3" y1="6" x2="21" y2="6" />
                         <path d="M16 10a4 4 0 01-8 0" />
                     </svg>
+                    <span v-if="cart.totalItems > 0" class="cart-badge">{{ cart.totalItems }}</span>
                 </button>
                 <button aria-label="Menu" @click="menuDrawerRef.openMenu()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -207,6 +208,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import MenuDrawer from '@/Componenets/MenuDrawer.vue'
+import { useCartStore } from '@/stores/cartStore'
+
+const cart = useCartStore()
 
 const menuDrawerRef = ref(null)
 
@@ -223,12 +227,12 @@ const maxPrice = ref(2000)
 
 // Sidebar static data
 const categories = [
-    { slug: 'chair', label: 'Chairs', count: 20 },
-    { slug: 'bed', label: 'Beds', count: 24 },
-    { slug: 'table', label: 'Tables', count: 20 },
-    { slug: 'tablelamps', label: 'Table Lamps', count: 33 },
-    { slug: 'vases&pots', label: 'Vases & Pots', count: 33 },
-    { slug: 'Other', label: 'Other', count: 29 },
+    { slug: 'furniture', label: 'All Furniture', count: 20 },
+    { slug: 'sofas', label: 'Sofas', count: 24 },
+    { slug: 'bedroom-furniture', label: 'Bedroom', count: 20 },
+    { slug: 'tables', label: 'Tables', count: 33 },
+    { slug: 'lighting', label: 'Lighting', count: 33 },
+    { slug: 'home-decoration', label: 'Decoration', count: 29 },
 ]
 
 const colors = [
@@ -682,13 +686,14 @@ onMounted(fetchProducts)
     flex-shrink: 0;
     position: sticky;
     top: 90px;
+    background: transparent !important;
 }
 
 .search-wrap {
     display: flex;
     align-items: center;
     border: 1px solid rgba(180, 140, 100, .4);
-    background: #fff;
+    background: transparent !important;
     margin-bottom: 32px;
 }
 
@@ -700,7 +705,7 @@ onMounted(fetchProducts)
     font-size: 12px;
     font-family: 'Jost', sans-serif;
     color: #2b1f14;
-    background: transparent;
+    background: transparent !important;
 }
 
 .search-input::placeholder {
@@ -730,8 +735,16 @@ onMounted(fetchProducts)
     font-size: 13px;
     font-weight: 600;
     letter-spacing: .08em;
-    color: #2b1f14;
+    color: var(--text-primary);
     margin-bottom: 14px;
+}
+
+.filter-name {
+    color: #7a6050 !important;
+}
+
+.filter-item.selected .filter-name {
+    color: var(--accent) !important;
 }
 
 .filter-list {
@@ -751,7 +764,7 @@ onMounted(fetchProducts)
 
 .filter-item:hover .filter-name,
 .filter-item.selected .filter-name {
-    color: #b85c38;
+    color: var(--accent) !important;
 }
 
 .filter-name {
