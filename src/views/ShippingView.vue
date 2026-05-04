@@ -164,7 +164,7 @@
                     </div>
                     <div class="total-row">
                         <span>SHIPPING</span>
-                        <span>${{ selectedShipping.price.toFixed(2) }}</span>
+                        <span>${{ selectedShipping?.price.toFixed(2) ?? '0.00' }}</span>
                     </div>
                     <div class="total-row discount" v-if="discountAmount > 0">
                         <span>DISCOUNT</span>
@@ -194,39 +194,48 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cartStore'
+import type { CartItem, ShippingForm, ShippingMethod } from '@/types'
 
 const cart = useCartStore()
-
 const router = useRouter()
-const currentStep = ref(0)
-const steps = ['Cart', 'Payment', 'Review']
 
-const form = ref({
+const currentStep = ref<number>(0)
+const steps: string[] = ['Cart', 'Payment', 'Review']
+
+const form = ref<ShippingForm>({
     firstName: '', lastName: '', street: '',
     city: '', zip: '', country: '', state: '', phone: ''
 })
 
-const shippingMethods = [
+const shippingMethods: ShippingMethod[] = [
     { id: 'priority', name: 'Priority Courier', eta: 'Arrives in approximately 2–3 business days', price: 12.00 },
     { id: 'standard', name: 'Standard Shipping', eta: 'Arrives in approximately 5–7 business days', price: 5.00 },
     { id: 'free', name: 'Free Shipping', eta: 'Arrives in approximately 10–14 business days', price: 0.00 },
 ]
 
-const selectedMethod = ref('priority')
-const couponCode = ref('')
-const discountAmount = ref(0)
+const selectedMethod = ref<string>('priority')
+const couponCode = ref<string>('')
+const discountAmount = ref<number>(0)
 
-const cartItems = computed(() => cart.items)
+const cartItems = computed<CartItem[]>(() => cart.items)
 
-const selectedShipping = computed(() => shippingMethods.find(m => m.id === selectedMethod.value))
-const subtotal = computed(() => cartItems.value.reduce((s, i) => s + i.price * i.qty, 0))
-const grandTotal = computed(() => subtotal.value + selectedShipping.value.price - discountAmount.value)
+const selectedShipping = computed<ShippingMethod | undefined>(() =>
+    shippingMethods.find(m => m.id === selectedMethod.value)
+)
 
-function applyCoupon() {
+const subtotal = computed<number>(() =>
+    cartItems.value.reduce((s: number, i: CartItem) => s + i.price * i.qty, 0)
+)
+
+const grandTotal = computed<number>(() =>
+    subtotal.value + (selectedShipping.value?.price ?? 0) - discountAmount.value
+)
+
+function applyCoupon(): void {
     if (couponCode.value.toLowerCase() === 'hevan10') {
         discountAmount.value = subtotal.value * 0.1
     } else {
@@ -235,9 +244,8 @@ function applyCoupon() {
     }
 }
 
-function continueToPayment() {
+function continueToPayment(): void {
     currentStep.value = 1
-    // navigate to payment page or show confirmation
     alert('Proceeding to payment… (connect your payment gateway here)')
 }
 </script>
@@ -330,7 +338,7 @@ function continueToPayment() {
     background: #b85c38;
 }
 
-.nav-right {}
+
 
 .back-link {
     display: inline-flex;
@@ -483,7 +491,7 @@ function continueToPayment() {
 .method-name {
     font-size: 13px;
     font-weight: 500;
-    color: #2b1f14;
+    color: var(--text-primary) !important;
     margin-bottom: 3px;
 }
 
@@ -495,7 +503,7 @@ function continueToPayment() {
 .method-price {
     font-size: 13px;
     font-weight: 500;
-    color: #2b1f14;
+    color: var(--text-primary) !important;
     white-space: nowrap;
 }
 
@@ -731,7 +739,7 @@ function continueToPayment() {
 
 /* Totals */
 .totals {
-    border-top: 1px solid rgba(180, 140, 100, .2);
+    border-top: 1px solid var(--text-primary) !important;
     padding-top: 16px;
     margin-bottom: 20px;
 }
@@ -752,7 +760,7 @@ function continueToPayment() {
 .total-row.grand {
     font-size: 16px;
     font-weight: 600;
-    color: #2b1f14;
+    color: var(--text-primary) !important;
     padding-top: 12px;
     margin-top: 6px;
     border-top: 1px solid rgba(180, 140, 100, .2);

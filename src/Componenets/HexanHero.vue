@@ -291,7 +291,7 @@ nav {
     font-family: 'Lato', sans-serif;
     font-size: clamp(30px, 5.5vw, 72px);
     font-weight: 700;
-    color: #4a2b11;
+    color: #4a2b11 !important;
     letter-spacing: .03em;
     white-space: nowrap;
     z-index: 10;

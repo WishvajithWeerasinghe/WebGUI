@@ -266,33 +266,39 @@
     <MenuDrawer ref="menuDrawerRef" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import MenuDrawer from '@/Componenets/MenuDrawer.vue'
 import { useCartStore } from '@/stores/cartStore'
 import { useRouter } from 'vue-router'
+import type { Product, ProductsResponse, PlacedItem, SidebarCategory, CommentForm } from '@/types'
 
 const cart = useCartStore()
 const router = useRouter()
-const menuDrawerRef = ref(null)
+const menuDrawerRef = ref<InstanceType<typeof MenuDrawer> | null>(null)
 
-const roomImage = ref(null)
-const roomImageBase64 = ref(null)
-const placedItems = ref([])
-const shopProducts = ref([])
-const loadingProducts = ref(true)
-const analyzing = ref(false)
-const aiSuggestion = ref('')
-const canvasRef = ref(null)
-const draggingUid = ref(null)
-const draggingProduct = ref(null) // for new drops from inventory
-let dragOffsetX = 0, dragOffsetY = 0
-let resizingItem = null, resizeStartX = 0, resizeStartW = 0
-let uidCounter = 0
+const roomImage = ref<string | null>(null)
+const roomImageBase64 = ref<string | null>(null)
+const placedItems = ref<PlacedItem[]>([])
+const shopProducts = ref<Product[]>([])
+const loadingProducts = ref<boolean>(true)
+const analyzing = ref<boolean>(false)
+const aiSuggestion = ref<string>('')
+const canvasRef = ref<HTMLDivElement | null>(null)
+const draggingUid = ref<number | null>(null)
+const draggingProduct = ref<Product | null>(null)
+const selectedSidebarCat = ref<string>('')
 
-const comment = ref({ text: '', name: '', email: '', website: '', save: false })
+let dragOffsetX: number = 0
+let dragOffsetY: number = 0
+let resizingItem: PlacedItem | null = null
+let resizeStartX: number = 0
+let resizeStartW: number = 0
+let uidCounter: number = 0
 
-const sidebarCats = [
+const comment = ref<CommentForm>({ text: '', name: '', email: '', website: '', save: false })
+
+const sidebarCats: SidebarCategory[] = [
     { label: 'All Furniture', slug: '', count: 21 },
     { label: 'Sofas', slug: 'sofas', count: 20 },
     { label: 'Bedroom', slug: 'bedroom-furniture', count: 20 },
@@ -301,11 +307,8 @@ const sidebarCats = [
     { label: 'Decoration', slug: 'home-decoration', count: 28 },
 ]
 
-const selectedSidebarCat = ref('')
-
-// --- Computed ---
-const uniquePlacedItems = computed(() => {
-    const seen = new Set()
+const uniquePlacedItems = computed<PlacedItem[]>(() => {
+    const seen = new Set<number>()
     return placedItems.value.filter(i => {
         if (seen.has(i.id)) return false
         seen.add(i.id)
@@ -313,26 +316,27 @@ const uniquePlacedItems = computed(() => {
     })
 })
 
-// --- Room Upload ---
-function onRoomUpload(e) {
-    const file = e.target.files[0]
+function onRoomUpload(e: Event): void {
+    const input = e.target as HTMLInputElement
+    const file = input.files?.[0]
     if (!file) return
     const reader = new FileReader()
-    reader.onload = (ev) => {
-        roomImage.value = ev.target.result
-        roomImageBase64.value = ev.target.result.split(',')[1]
+    reader.onload = (ev: ProgressEvent<FileReader>) => {
+        const result = ev.target?.result
+        if (typeof result !== 'string') return
+        roomImage.value = result
+        roomImageBase64.value = result.split(',')[1] ?? null
     }
     reader.readAsDataURL(file)
 }
 
-// --- Drag from inventory ---
-function onDragStart(e, product) {
+function onDragStart(e: DragEvent, product: Product): void {
     draggingProduct.value = product
-    e.dataTransfer.effectAllowed = 'copy'
+    if (e.dataTransfer) e.dataTransfer.effectAllowed = 'copy'
 }
 
-function onDrop(e) {
-    if (!draggingProduct.value) return
+function onDrop(e: DragEvent): void {
+    if (!draggingProduct.value || !canvasRef.value) return
     const rect = canvasRef.value.getBoundingClientRect()
     const x = e.clientX - rect.left - 60
     const y = e.clientY - rect.top - 60
@@ -349,8 +353,8 @@ function onDrop(e) {
     draggingProduct.value = null
 }
 
-function addToCanvas(product) {
-    const rect = canvasRef.value.getBoundingClientRect()
+function addToCanvas(product: Product): void {
+    if (!canvasRef.value) return
     placedItems.value.push({
         uid: ++uidCounter,
         id: product.id,
@@ -363,26 +367,28 @@ function addToCanvas(product) {
     })
 }
 
-function placeOrder() {
-    uniquePlacedItems.value.forEach(item => cart.addItem(item))
+function placeOrder(): void {
+    uniquePlacedItems.value.forEach(item => cart.addItem(item as unknown as Product))
     router.push('/shipping')
 }
 
-function removePlacedItem(id) {
+function removePlacedItem(id: number): void {
     placedItems.value = placedItems.value.filter(i => i.id !== id)
 }
 
-// --- Drag placed items ---
-function startDrag(e, item) {
-    if (e.target.classList.contains('resize-handle') || e.target.classList.contains('placed-remove')) return
+function startDrag(e: MouseEvent, item: PlacedItem): void {
+    const target = e.target as HTMLElement
+    if (target.classList.contains('resize-handle') || target.classList.contains('placed-remove')) return
     draggingUid.value = item.uid
+    if (!canvasRef.value) return
     const rect = canvasRef.value.getBoundingClientRect()
     dragOffsetX = e.clientX - rect.left - item.x
     dragOffsetY = e.clientY - rect.top - item.y
     e.preventDefault()
 }
 
-function onMouseMove(e) {
+function onMouseMove(e: MouseEvent): void {
+    if (!canvasRef.value) return
     const rect = canvasRef.value.getBoundingClientRect()
     if (draggingUid.value !== null) {
         const item = placedItems.value.find(i => i.uid === draggingUid.value)
@@ -397,55 +403,43 @@ function onMouseMove(e) {
     }
 }
 
-function onMouseUp() {
+function onMouseUp(): void {
     draggingUid.value = null
     resizingItem = null
 }
 
-function startResize(e, item) {
+function startResize(e: MouseEvent, item: PlacedItem): void {
     resizingItem = item
     resizeStartX = e.clientX
     resizeStartW = item.w
     e.preventDefault()
 }
 
-function removeItem(uid) {
+function removeItem(uid: number): void {
     placedItems.value = placedItems.value.filter(i => i.uid !== uid)
 }
 
-// --- AI Analysis ---
-async function analyzeRoom() {
+async function analyzeRoom(): Promise<void> {
     if (!roomImage.value) return
     analyzing.value = true
     aiSuggestion.value = ''
     try {
-        const itemNames = uniquePlacedItems.value.map(i => i.title).join(', ') || 'no furniture yet'
+        const itemNames: string = uniquePlacedItems.value.map(i => i.title).join(', ') || 'no furniture yet'
         const messages = [
             {
                 role: 'user',
                 content: roomImageBase64.value
                     ? [
-                        {
-                            type: 'image',
-                            source: { type: 'base64', media_type: 'image/jpeg', data: roomImageBase64.value }
-                        },
-                        {
-                            type: 'text',
-                            text: `You are an interior design AI assistant. The user has placed these furniture items in their room: ${itemNames}. Look at the room image and give a short 2-sentence suggestion on how the furniture fits and what could be improved. Be warm, specific, and actionable.`
-                        }
+                        { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: roomImageBase64.value } },
+                        { type: 'text', text: `You are an interior design AI assistant. The user has placed these furniture items in their room: ${itemNames}. Look at the room image and give a short 2-sentence suggestion on how the furniture fits and what could be improved. Be warm, specific, and actionable.` }
                     ]
                     : [{ type: 'text', text: `Give a short interior design tip for placing: ${itemNames}` }]
             }
         ]
-
         const res = await fetch('https://api.anthropic.com/v1/messages', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                model: 'claude-sonnet-4-20250514',
-                max_tokens: 1000,
-                messages,
-            })
+            body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages })
         })
         const data = await res.json()
         aiSuggestion.value = data.content?.[0]?.text || 'Looking great! Consider balancing the furniture arrangement for better flow.'
@@ -456,11 +450,10 @@ async function analyzeRoom() {
     }
 }
 
-// --- Fetch Products ---
-async function fetchProducts() {
+async function fetchProducts(): Promise<void> {
     try {
-        const categories = ['furniture', 'sofas', 'bedroom-furniture', 'lighting', 'home-decoration']
-        const results = await Promise.all(
+        const categories: string[] = ['furniture', 'sofas', 'bedroom-furniture', 'lighting', 'home-decoration']
+        const results: ProductsResponse[] = await Promise.all(
             categories.map(cat =>
                 fetch(`https://dummyjson.com/products/category/${cat}?limit=4`).then(r => r.json())
             )
@@ -473,14 +466,13 @@ async function fetchProducts() {
     }
 }
 
-async function filterByCategory(slug) {
+async function filterByCategory(slug: string): Promise<void> {
     selectedSidebarCat.value = slug
     loadingProducts.value = true
     try {
         if (!slug) {
-            // show all — use multi-category fetch
-            const categories = ['furniture', 'sofas', 'bedroom-furniture', 'lighting', 'home-decoration']
-            const results = await Promise.all(
+            const categories: string[] = ['furniture', 'sofas', 'bedroom-furniture', 'lighting', 'home-decoration']
+            const results: ProductsResponse[] = await Promise.all(
                 categories.map(cat =>
                     fetch(`https://dummyjson.com/products/category/${cat}?limit=4`).then(r => r.json())
                 )
@@ -488,7 +480,7 @@ async function filterByCategory(slug) {
             shopProducts.value = results.flatMap(d => d.products).slice(0, 12)
         } else {
             const res = await fetch(`https://dummyjson.com/products/category/${slug}?limit=12`)
-            const data = await res.json()
+            const data: ProductsResponse = await res.json()
             shopProducts.value = data.products
         }
     } catch (e) {

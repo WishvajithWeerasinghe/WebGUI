@@ -92,7 +92,7 @@
                     <div class="pagination" v-if="!loading && totalPages > 1">
                         <button v-for="p in paginationPages" :key="p" class="page-btn"
                             :class="{ active: p === currentPage, ellipsis: p === '…' }" :disabled="p === '…'"
-                            @click="p !== '…' && goToPage(p)">{{ p }}</button>
+                            @click="typeof p === 'number' && goToPage(p)">{{ p }}</button>
                         <button class="page-btn view-all" @click="viewAll">view all</button>
                     </div>
                 </section>
@@ -205,28 +205,29 @@
     <MenuDrawer ref="menuDrawerRef" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import MenuDrawer from '@/Componenets/MenuDrawer.vue'
 import { useCartStore } from '@/stores/cartStore'
+import { useRouter } from 'vue-router'
+import type { Product, ProductsResponse, SidebarCategory, ColorFilter } from '@/types'
 
 const cart = useCartStore()
+const router = useRouter()
+const menuDrawerRef = ref<InstanceType<typeof MenuDrawer> | null>(null)
 
-const menuDrawerRef = ref(null)
+const products = ref<Product[]>([])
+const loading = ref<boolean>(true)
+const total = ref<number>(0)
+const currentPage = ref<number>(1)
+const perPage: number = 9
+const sortBy = ref<string>('popularity')
+const searchQuery = ref<string>('')
+const selectedCategory = ref<string>('')
+const selectedColor = ref<string>('')
+const maxPrice = ref<number>(2000)
 
-const products = ref([])
-const loading = ref(true)
-const total = ref(0)
-const currentPage = ref(1)
-const perPage = 9
-const sortBy = ref('popularity')
-const searchQuery = ref('')
-const selectedCategory = ref('')
-const selectedColor = ref('')
-const maxPrice = ref(2000)
-
-// Sidebar static data
-const categories = [
+const categories: SidebarCategory[] = [
     { slug: 'furniture', label: 'All Furniture', count: 20 },
     { slug: 'sofas', label: 'Sofas', count: 24 },
     { slug: 'bedroom-furniture', label: 'Bedroom', count: 20 },
@@ -235,7 +236,7 @@ const categories = [
     { slug: 'home-decoration', label: 'Decoration', count: 29 },
 ]
 
-const colors = [
+const colors: ColorFilter[] = [
     { name: 'Beige', hex: '#d4b896', count: 12 },
     { name: 'Brown', hex: '#8b4513', count: 18 },
     { name: 'White', hex: '#f5f0e8', count: 15 },
@@ -245,12 +246,12 @@ const colors = [
 ]
 
 // Pagination
-const totalPages = computed(() => Math.ceil(total.value / perPage))
-const showingFrom = computed(() => (currentPage.value - 1) * perPage + 1)
-const showingTo = computed(() => Math.min(currentPage.value * perPage, total.value))
+const totalPages = computed<number>(() => Math.ceil(total.value / perPage))
+const showingFrom = computed<number>(() => (currentPage.value - 1) * perPage + 1)
+const showingTo = computed<number>(() => Math.min(currentPage.value * perPage, total.value))
 
-const paginationPages = computed(() => {
-    const pages = []
+const paginationPages = computed<(number | string)[]>(() => {
+    const pages: (number | string)[] = []
     const tp = totalPages.value
     const cp = currentPage.value
     if (tp <= 7) {
@@ -265,11 +266,11 @@ const paginationPages = computed(() => {
     return pages
 })
 
-async function fetchProducts() {
+async function fetchProducts(): Promise<void> {
     loading.value = true
     try {
-        const skip = (currentPage.value - 1) * perPage
-        let url = ''
+        const skip: number = (currentPage.value - 1) * perPage
+        let url: string = ''
 
         if (searchQuery.value) {
             url = `https://dummyjson.com/products/search?q=${encodeURIComponent(searchQuery.value)}&limit=${perPage}&skip=${skip}`
@@ -279,19 +280,16 @@ async function fetchProducts() {
             url = `https://dummyjson.com/products/category/furniture?limit=${perPage}&skip=${skip}`
         }
 
-        // Sorting
         if (sortBy.value === 'price-asc') url += '&sortBy=price&order=asc'
         else if (sortBy.value === 'price-desc') url += '&sortBy=price&order=desc'
         else if (sortBy.value === 'rating') url += '&sortBy=rating&order=desc'
 
         const res = await fetch(url)
-        const data = await res.json()
+        const data: ProductsResponse = await res.json()
 
-        // Apply client-side price filter
-        // AFTER
-        const filtered = data.products.filter(p => {
-            const matchesPrice = p.price <= maxPrice.value
-            const matchesColor = !selectedColor.value ||
+        const filtered: Product[] = data.products.filter((p: Product) => {
+            const matchesPrice: boolean = p.price <= maxPrice.value
+            const matchesColor: boolean = !selectedColor.value ||
                 p.title.toLowerCase().includes(selectedColor.value.toLowerCase()) ||
                 p.description.toLowerCase().includes(selectedColor.value.toLowerCase())
             return matchesPrice && matchesColor
@@ -306,34 +304,38 @@ async function fetchProducts() {
     }
 }
 
-function goToPage(p) {
+function goToPage(p: number): void {
     currentPage.value = p
     fetchProducts()
     window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-function viewAll() {
+function viewAll(): void {
     currentPage.value = 1
     selectedCategory.value = ''
     searchQuery.value = ''
     fetchProducts()
 }
 
-function selectCategory(slug) {
+function selectCategory(slug: string): void {
     selectedCategory.value = selectedCategory.value === slug ? '' : slug
     currentPage.value = 1
     fetchProducts()
 }
 
-function selectColor(name) {
+function selectColor(name: string): void {
     selectedColor.value = selectedColor.value === name ? '' : name
     currentPage.value = 1
     fetchProducts()
 }
 
-function applyFilters() {
+function applyFilters(): void {
     currentPage.value = 1
     fetchProducts()
+}
+
+function openQuickView(product: Product): void {
+    router.push('/products/' + product.id)
 }
 
 onMounted(fetchProducts)

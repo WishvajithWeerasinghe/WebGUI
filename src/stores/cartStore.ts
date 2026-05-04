@@ -1,13 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import type { CartItem, Product } from '@/types'
 
 export const useCartStore = defineStore('cart', () => {
-    const items = ref([])
+    const items = ref<CartItem[]>([])
 
-    const totalItems = computed(() => items.value.reduce((s, i) => s + i.qty, 0))
-    const subtotal = computed(() => items.value.reduce((s, i) => s + i.price * i.qty, 0))
+    const totalItems = computed<number>(() => items.value.reduce((s, i) => s + i.qty, 0))
+    const subtotal = computed<number>(() => items.value.reduce((s, i) => s + i.price * i.qty, 0))
 
-    function addItem(product) {
+    function addItem(product: Product): void {
         const existing = items.value.find(i => i.id === product.id)
         if (existing) {
             existing.qty++
@@ -23,11 +24,11 @@ export const useCartStore = defineStore('cart', () => {
         }
     }
 
-    function removeItem(id) {
+    function removeItem(id: number): void {
         items.value = items.value.filter(i => i.id !== id)
     }
 
-    function updateQty(id, qty) {
+    function updateQty(id: number, qty: number): void {
         const item = items.value.find(i => i.id === id)
         if (item) {
             if (qty <= 0) removeItem(id)
@@ -35,7 +36,7 @@ export const useCartStore = defineStore('cart', () => {
         }
     }
 
-    function clearCart() {
+    function clearCart(): void {
         items.value = []
     }
 

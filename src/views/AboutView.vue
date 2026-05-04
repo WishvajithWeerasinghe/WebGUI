@@ -92,7 +92,7 @@
                     @click="$router.push('/products/' + product.id)">
                     <div class="op-img-wrap">
                         <img :src="product.thumbnail" :alt="product.title" class="op-img" />
-                        <span v-if="product.badge" class="op-badge">{{ product.badge }}</span>
+                        <span v-if="product.discountPercentage > 10" class="op-badge">Sale</span>
                     </div>
                     <div class="op-body">
                         <div class="op-meta">
@@ -162,18 +162,29 @@
     <MenuDrawer ref="menuDrawerRef" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import MenuDrawer from '@/Componenets/MenuDrawer.vue'
 import { useCartStore } from '@/stores/cartStore'
+import type { Product, ProductsResponse } from '@/types'
+
+interface Feature {
+    title: string
+    desc: string
+    icon: string
+}
+
+interface Skill {
+    label: string
+    value: number
+}
 
 const cart = useCartStore()
+const menuDrawerRef = ref<InstanceType<typeof MenuDrawer> | null>(null)
+const animated = ref<boolean>(false)
+const featuredProducts = ref<Product[]>([])
 
-const menuDrawerRef = ref(null)
-const animated = ref(false)
-const featuredProducts = ref([])
-
-const features = [
+const features: Feature[] = [
     {
         title: 'Shop online',
         desc: 'Browse our full collection and order from the comfort of your home.',
@@ -196,16 +207,16 @@ const features = [
     },
 ]
 
-const skills = [
+const skills: Skill[] = [
     { label: 'Creativity', value: 72 },
     { label: 'Advertising', value: 84 },
     { label: 'Design', value: 72 },
 ]
 
-async function fetchFeatured() {
+async function fetchFeatured(): Promise<void> {
     try {
         const res = await fetch('https://dummyjson.com/products/category/furniture?limit=3&sortBy=rating&order=desc')
-        const data = await res.json()
+        const data: ProductsResponse = await res.json()
         featuredProducts.value = data.products
     } catch (e) {
         console.error(e)
@@ -214,7 +225,7 @@ async function fetchFeatured() {
 
 onMounted(async () => {
     await fetchFeatured()
-    // trigger bar animation after mount
+
     setTimeout(() => animated.value = true, 300)
 })
 </script>

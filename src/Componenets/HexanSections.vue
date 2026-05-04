@@ -72,32 +72,39 @@
     </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import type { ProductsResponse } from '@/types'
+
+interface DisplayProduct {
+    name: string
+    price: string
+    badge: string
+    img: string
+}
 
 const router = useRouter()
-const products = ref([])
-const hoveredCard = ref(null)
+const products = ref<DisplayProduct[]>([])
 
-function navigate(path) {
+function navigate(path: string): void {
     router.push(path)
 }
 
 onMounted(async () => {
     try {
         const response = await fetch('https://dummyjson.com/products/category/furniture?limit=3')
-        const data = await response.json()
-        products.value = data.products.map((product) => ({
+        const data: ProductsResponse = await response.json()
+        products.value = data.products.map(product => ({
             name: product.title,
             price: `$${product.price}`,
-            badge: product.discountPercentage ? 'Sale' : 'New',
+            badge: product.discountPercentage > 10 ? 'Sale' : 'New',
             img: product.thumbnail,
         }))
     } catch (error) {
         console.error('Error fetching products:', error)
     }
-},)
+})
 </script>
 
 <style scoped>

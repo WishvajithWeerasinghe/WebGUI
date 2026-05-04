@@ -216,28 +216,28 @@
     <MenuDrawer ref="menuDrawerRef" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import MenuDrawer from '@/Componenets/MenuDrawer.vue'
 import { useCartStore } from '@/stores/cartStore'
+import type { Product, ProductsResponse } from '@/types'
 
 const cart = useCartStore()
-
-const menuDrawerRef = ref(null)
-
+const menuDrawerRef = ref<InstanceType<typeof MenuDrawer> | null>(null)
 const route = useRoute()
-const product = ref(null)
-const related = ref([])
-const loading = ref(true)
-const activeImg = ref(0)
-const qty = ref(1)
-const addedToCart = ref(false)
-const wishlisted = ref(false)
-const activeTab = ref('Description')
-const tabs = ['Description', 'Additional information', 'Preview']
 
-async function fetchProduct(id) {
+const product = ref<Product | null>(null)
+const related = ref<Product[]>([])
+const loading = ref<boolean>(true)
+const activeImg = ref<number>(0)
+const qty = ref<number>(1)
+const addedToCart = ref<boolean>(false)
+const wishlisted = ref<boolean>(false)
+const activeTab = ref<string>('Description')
+const tabs: string[] = ['Description', 'Additional information', 'Preview']
+
+async function fetchProduct(id: string | string[]): Promise<void> {
     loading.value = true
     activeImg.value = 0
     qty.value = 1
@@ -247,31 +247,32 @@ async function fetchProduct(id) {
         product.value = await res.json()
 
         const relRes = await fetch(`https://dummyjson.com/products/category/furniture?limit=8`)
-        const relData = await relRes.json()
-        related.value = relData.products.filter(p => p.id !== product.value.id).slice(0, 4)
+        const relData: ProductsResponse = await relRes.json()
+        related.value = relData.products
+            .filter((p: Product) => p.id !== product.value?.id)
+            .slice(0, 4)
     } catch (e) {
         console.error(e)
     } finally {
         loading.value = false
     }
-
-    function addToCart() {
-        for (let i = 0; i < qty.value; i++) {
-            cart.addItem(product.value)
-        }
-        addedToCart.value = true
-    }
 }
 
-function addToCart() {
+function addToCart(): void {
+    if (!product.value) return
     for (let i = 0; i < qty.value; i++) {
         cart.addItem(product.value)
     }
     addedToCart.value = true
 }
 
-onMounted(() => fetchProduct(route.params.id))
-watch(() => route.params.id, id => id && fetchProduct(id))
+onMounted(() => {
+    if (route.params.id) fetchProduct(route.params.id)
+})
+
+watch(() => route.params.id, (id) => {
+    if (id) fetchProduct(id)
+})
 </script>
 
 <style scoped>
@@ -513,7 +514,7 @@ watch(() => route.params.id, id => id && fetchProduct(id))
 .price {
     font-size: 22px;
     font-weight: 500;
-    color: #2b1f14;
+    color: var(--text-primary);
     font-family: 'Cormorant Garamond', serif;
 }
 
@@ -544,7 +545,7 @@ watch(() => route.params.id, id => id && fetchProduct(id))
     background: transparent;
     border: none;
     font-size: 18px;
-    color: #2b1f14;
+    color: var(--text-primary);
     cursor: pointer;
     transition: background .2s;
 }
@@ -557,7 +558,7 @@ watch(() => route.params.id, id => id && fetchProduct(id))
     width: 40px;
     text-align: center;
     font-size: 14px;
-    color: #2b1f14;
+    color: var(--text-primary);
     border-left: 1px solid rgba(180, 140, 100, .3);
     border-right: 1px solid rgba(180, 140, 100, .3);
     line-height: 36px;
@@ -629,7 +630,7 @@ watch(() => route.params.id, id => id && fetchProduct(id))
 
 .meta-val {
     font-size: 12px;
-    color: #2b1f14;
+    color: var(--text-primary);
 }
 
 .color-swatches {
