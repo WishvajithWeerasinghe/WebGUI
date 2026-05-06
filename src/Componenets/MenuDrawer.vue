@@ -30,8 +30,17 @@
                 <div class="drawer-divider"></div>
 
                 <div class="drawer-actions">
+                    <!-- Logged in user -->
+                    <div v-if="currentUser" class="drawer-user">
+                        <img :src="currentUser.image" class="drawer-avatar" />
+                        <div>
+                            <p class="drawer-username">{{ currentUser.firstName }} {{ currentUser.lastName }}</p>
+                            <button class="drawer-logout" @click="logout">Log out</button>
+                        </div>
+                    </div>
+
                     <!-- Login / Signup -->
-                    <button class="drawer-action-btn" @click="openLogin">
+                    <button v-else class="drawer-action-btn" @click="openLogin">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18"
                             height="18">
                             <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
@@ -107,9 +116,8 @@
 
                     <div class="auth-form">
                         <div class="auth-field">
-                            <label class="auth-label">EMAIL</label>
-                            <input v-model="login.email" type="email" placeholder="perera@gmail.com"
-                                class="auth-input" />
+                            <label class="auth-label">USERNAME</label>
+                            <input v-model="login.username" type="text" placeholder="perera" class="auth-input" />
                         </div>
                         <div class="auth-field">
                             <label class="auth-label">PASSWORD</label>
@@ -120,7 +128,11 @@
                             <a href="#" class="forgot-link">Forgot Password?</a>
                         </div>
 
-                        <button class="btn-auth" @click="handleLogin">SIGN IN</button>
+                        <p v-if="authError" class="auth-error">{{ authError }}</p>
+
+                        <button class="btn-auth" @click="handleLogin" :disabled="authLoading">
+                            {{ authLoading ? 'SIGNING IN...' : 'SIGN IN' }}
+                        </button>
 
                         <p class="auth-switch">
                             Don't Have An Account?
@@ -175,7 +187,11 @@
                             <span>Agree Terms And Condition</span>
                         </label>
 
-                        <button class="btn-auth" @click="handleSignup">REGISTER</button>
+                        <p v-if="authError" class="auth-error">{{ authError }}</p>
+
+                        <button class="btn-auth" @click="handleSignup" :disabled="authLoading">
+                            {{ authLoading ? 'CREATING...' : 'REGISTER' }}
+                        </button>
 
                         <p class="auth-switch">
                             Already Have An Account?
@@ -188,73 +204,136 @@
     </Teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useThemeStore } from '@/stores/themeStore'
+import type { AuthUser } from '@/types'
 
 const theme = useThemeStore()
 
-const menuOpen = ref(false)
-const showLogin = ref(false)
-const showSignup = ref(false)
-const isDark = computed(() => theme.isDark)
+const menuOpen = ref < boolean > (false)
+const showLogin = ref < boolean > (false)
+const showSignup = ref < boolean > (false)
+const isDark = computed < boolean > (() => theme.isDark)
+const authLoading = ref < boolean > (false)
+const authError = ref < string > ('')
 
-const login = ref({ email: '', password: '' })
+// Auth state persisted in localStorage
+const currentUser = ref < AuthUser | null > (
+    localStorage.getItem('hevan_user')
+        ? JSON.parse(localStorage.getItem('hevan_user')!)
+        : null
+)
+
+const login = ref({ username: '', password: '' })
 const signup = ref({ username: '', email: '', password: '', agree: false })
 
-// Expose openMenu so parent nav can call it
 defineExpose({ openMenu: () => { menuOpen.value = true } })
 
-function openLogin() {
+function openLogin(): void {
     menuOpen.value = false
     showLogin.value = true
     showSignup.value = false
+    authError.value = ''
 }
 
-function switchToSignup() {
+function switchToSignup(): void {
     showLogin.value = false
     showSignup.value = true
+    authError.value = ''
 }
 
-function switchToLogin() {
+function switchToLogin(): void {
     showSignup.value = false
     showLogin.value = true
+    authError.value = ''
 }
 
-function closeAll() {
+function closeAll(): void {
     menuOpen.value = false
     showLogin.value = false
     showSignup.value = false
+    authError.value = ''
 }
 
-// function toggleDark() {
-//     isDark.value = !isDark.value
-//     document.documentElement.classList.toggle('dark', isDark.value)
-// }
-function toggleDark() {
+function toggleDark(): void {
     theme.toggle()
 }
 
-function handleLogin() {
-    if (!login.value.email || !login.value.password) {
-        alert('Please fill in all fields.')
-        return
-    }
-    alert(`Welcome back! Logged in as ${login.value.email}`)
-    closeAll()
+function logout(): void {
+    currentUser.value = null
+    localStorage.removeItem('hevan_user')
+    localStorage.removeItem('hevan_token')
+    menuOpen.value = false
 }
 
-function handleSignup() {
+async function handleLogin(): Promise<void> {
+    if (!login.value.username || !login.value.password) {
+        authError.value = 'Please fill in all fields.'
+        return
+    }
+    authLoading.value = true
+    authError.value = ''
+    try {
+        const res = await fetch('https://dummyjson.com/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: login.value.username,
+                password: login.value.password,
+                expiresInMins: 60
+            })
+        })
+        const data: AuthUser = await res.json()
+        if (!res.ok) {
+            authError.value = 'Invalid username or password.'
+            return
+        }
+        currentUser.value = data
+        localStorage.setItem('hevan_user', JSON.stringify(data))
+        localStorage.setItem('hevan_token', data.token)
+        closeAll()
+    } catch (e) {
+        authError.value = 'Something went wrong. Please try again.'
+    } finally {
+        authLoading.value = false
+    }
+}
+
+async function handleSignup(): Promise<void> {
     if (!signup.value.username || !signup.value.email || !signup.value.password) {
-        alert('Please fill in all fields.')
+        authError.value = 'Please fill in all fields.'
         return
     }
     if (!signup.value.agree) {
-        alert('Please agree to the terms and conditions.')
+        authError.value = 'Please agree to the terms and conditions.'
         return
     }
-    alert(`Account created for ${signup.value.username}! Welcome to Hevan Room.`)
-    closeAll()
+    authLoading.value = true
+    authError.value = ''
+    try {
+        const res = await fetch('https://dummyjson.com/users/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: signup.value.username,
+                email: signup.value.email,
+                password: signup.value.password,
+            })
+        })
+        if (!res.ok) {
+            authError.value = 'Could not create account. Please try again.'
+            return
+        }
+        // Switch to login after successful signup
+        signup.value = { username: '', email: '', password: '', agree: false }
+        switchToLogin()
+        authError.value = 'Account created! Please sign in.'
+    } catch (e) {
+        authError.value = 'Something went wrong. Please try again.'
+    } finally {
+        authLoading.value = false
+    }
 }
 </script>
 
@@ -367,6 +446,44 @@ function handleSignup() {
     color: #b85c38;
 }
 
+/* Logged in user */
+.drawer-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(180, 140, 100, .12);
+}
+
+.drawer-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid #b85c38;
+    flex-shrink: 0;
+}
+
+.drawer-username {
+    font-size: 13px;
+    font-weight: 500;
+    color: #2b1f14;
+    margin-bottom: 3px;
+    font-family: 'Jost', sans-serif;
+}
+
+.drawer-logout {
+    background: transparent;
+    border: none;
+    font-size: 11px;
+    color: #b85c38;
+    cursor: pointer;
+    padding: 0;
+    font-family: 'Jost', sans-serif;
+    letter-spacing: .06em;
+    text-decoration: underline;
+}
+
 /* Toggle pill */
 .toggle-pill {
     margin-left: auto;
@@ -443,7 +560,6 @@ function handleSignup() {
     color: #fff;
 }
 
-/* Image side */
 .modal-img-side {
     position: relative;
     overflow: hidden;
@@ -465,7 +581,6 @@ function handleSignup() {
     backdrop-filter: blur(4px);
 }
 
-/* Form side */
 .modal-form-side {
     padding: 40px 36px;
     display: flex;
@@ -552,6 +667,14 @@ function handleSignup() {
     letter-spacing: .03em;
 }
 
+.auth-error {
+    font-size: 11px;
+    color: #b85c38;
+    text-align: center;
+    letter-spacing: .04em;
+    margin-bottom: 12px;
+}
+
 .btn-auth {
     width: 100%;
     background: #8b3a20;
@@ -568,6 +691,11 @@ function handleSignup() {
 
 .btn-auth:hover {
     background: #2b1f14;
+}
+
+.btn-auth:disabled {
+    opacity: .6;
+    cursor: not-allowed;
 }
 
 .auth-switch {
