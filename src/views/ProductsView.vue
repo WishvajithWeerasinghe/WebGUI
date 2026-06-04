@@ -26,7 +26,7 @@
                     </svg>
                     <span v-if="cart.totalItems > 0" class="cart-badge">{{ cart.totalItems }}</span>
                 </button>
-                <button aria-label="Menu" @click="menuDrawerRef.openMenu()">
+                <button aria-label="Menu" @click="menuDrawerRef?.openMenu()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <line x1="3" y1="6" x2="21" y2="6" />
                         <line x1="3" y1="12" x2="21" y2="12" />
@@ -900,15 +900,45 @@ onMounted(fetchProducts)
     letter-spacing: .06em;
 }
 
-/* RESPONSIVE */
+
 @media (max-width: 900px) {
+    .nav {
+        padding: 14px 20px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .products-page {
+        padding: 24px 20px 60px;
+    }
+
+    .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .sort-wrap {
+        width: 100%;
+    }
+
+    .sort-select {
+        flex: 1;
+    }
+
     .content-row {
-        flex-direction: column-reverse;
+        flex-direction: column;
     }
 
     .sidebar {
         width: 100%;
         position: static;
+    }
+
+    .search-wrap {
+        max-width: 100%;
     }
 
     .product-grid {
@@ -923,13 +953,60 @@ onMounted(fetchProducts)
         grid-template-columns: 1fr 1fr;
         gap: 28px;
     }
+}
 
+@media (max-width: 480px) {
     .products-page {
-        padding: 24px 20px 60px;
+        padding: 16px 14px 48px;
     }
 
-    .nav {
-        padding: 14px 20px;
+    .topbar {
+        margin-bottom: 16px;
+    }
+
+    /* Stack sidebar filters horizontally on mobile */
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .filter-block {
+        margin-bottom: 20px;
+    }
+
+    /* Single column grid on small mobile */
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .page-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 11px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .footer {
+        padding: 36px 16px 20px;
+    }
+
+    /* Make filter sidebar collapsible feel on mobile */
+    .filter-title {
+        font-size: 14px;
+    }
+
+    .filter-name {
+        font-size: 13px;
+    }
+
+    .price-label {
+        font-size: 13px;
     }
 }
 </style>

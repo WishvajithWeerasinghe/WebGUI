@@ -26,7 +26,7 @@
                     </svg>
                     <span v-if="cart.totalItems > 0" class="cart-badge">{{ cart.totalItems }}</span>
                 </button>
-                <button aria-label="Menu" @click="menuDrawerRef.openMenu()">
+                <button aria-label="Menu" @click="menuDrawerRef?.openMenu()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <line x1="3" y1="6" x2="21" y2="6" />
                         <line x1="3" y1="12" x2="21" y2="12" />
@@ -666,8 +666,25 @@ onMounted(async () => {
     letter-spacing: .06em;
 }
 
-/* RESPONSIVE */
 @media (max-width: 900px) {
+    .nav {
+        padding: 14px 20px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .hero-section {
+        height: 240px;
+    }
+
+    .hero-title {
+        left: 24px;
+        bottom: 24px;
+        font-size: 32px;
+    }
+
     .features-section {
         padding: 40px 24px;
     }
@@ -675,6 +692,10 @@ onMounted(async () => {
     .features-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 28px;
+    }
+
+    .banner-section {
+        height: 200px;
     }
 
     .skills-section {
@@ -688,16 +709,7 @@ onMounted(async () => {
     }
 
     .our-products-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .nav {
-        padding: 14px 20px;
-    }
-
-    .hero-title {
-        left: 24px;
-        bottom: 24px;
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .footer {
@@ -707,6 +719,64 @@ onMounted(async () => {
     .footer-grid {
         grid-template-columns: 1fr 1fr;
         gap: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section {
+        height: 200px;
+    }
+
+    .hero-title {
+        font-size: 24px;
+        left: 16px;
+        bottom: 16px;
+    }
+
+    .features-section {
+        padding: 28px 16px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .banner-section {
+        height: 160px;
+    }
+
+    .skills-section {
+        padding: 36px 16px;
+    }
+
+    .skills-headline {
+        font-size: 24px;
+    }
+
+    .skills-desc {
+        font-size: 12px;
+    }
+
+    .our-products-section {
+        padding: 16px 16px 40px;
+    }
+
+    .our-products-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title {
+        font-size: 22px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .footer {
+        padding: 36px 16px 20px;
     }
 }
 </style>

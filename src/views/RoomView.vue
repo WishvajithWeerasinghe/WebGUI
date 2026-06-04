@@ -25,7 +25,7 @@
                     </svg>
                     <span v-if="cart.totalItems > 0" class="cart-badge">{{ cart.totalItems }}</span>
                 </button>
-                <button aria-label="Menu" @click="menuDrawerRef.openMenu()"><svg viewBox="0 0 24 24" fill="none"
+                <button aria-label="Menu" @click="menuDrawerRef?.openMenu()"><svg viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="1.8">
                         <line x1="3" y1="6" x2="21" y2="6" />
                         <line x1="3" y1="12" x2="21" y2="12" />
@@ -1345,22 +1345,45 @@ onUnmounted(() => window.removeEventListener('mouseup', onMouseUp))
 }
 
 /* RESPONSIVE */
+/* RESPONSIVE */
 @media (max-width: 900px) {
+    .nav {
+        padding: 14px 20px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .breadcrumb {
+        padding: 12px 20px;
+    }
+
     .page-body {
         grid-template-columns: 1fr;
         padding: 0 20px 60px;
     }
 
+    .page-title {
+        font-size: 20px;
+    }
+
+    .room-canvas {
+        height: 260px;
+    }
+
     .inventory-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 
-    .nav {
-        padding: 14px 20px;
+    .blog-nav {
+        flex-direction: column;
+        gap: 12px;
     }
 
-    .breadcrumb {
-        padding: 12px 20px;
+    .blog-nav-item.right {
+        text-align: left;
     }
 
     .footer {
@@ -1370,6 +1393,73 @@ onUnmounted(() => window.removeEventListener('mouseup', onMouseUp))
     .footer-grid {
         grid-template-columns: 1fr 1fr;
         gap: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-body {
+        padding: 0 16px 48px;
+    }
+
+    .upload-btn {
+        font-size: 11px;
+        padding: 8px 14px;
+    }
+
+    .room-canvas {
+        height: 220px;
+    }
+
+    .inventory-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .inv-img {
+        height: 100px;
+    }
+
+    .inv-name {
+        font-size: 10px;
+    }
+
+    .inv-price {
+        font-size: 10px;
+    }
+
+    .btn-analyze {
+        font-size: 11px;
+        padding: 8px 16px;
+    }
+
+    .order-summary {
+        padding: 14px;
+    }
+
+    .btn-place-order {
+        padding: 12px;
+        font-size: 11px;
+    }
+
+    .comment-textarea {
+        font-size: 12px;
+    }
+
+    .comment-input {
+        font-size: 12px;
+    }
+
+    .sidebar-post-img {
+        height: 100px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .footer {
+        padding: 36px 16px 20px;
     }
 }
 </style>

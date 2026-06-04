@@ -802,17 +802,8 @@ function continueToPayment(): void {
     letter-spacing: .06em;
 }
 
-/* RESPONSIVE */
+
 @media (max-width: 860px) {
-    .page-body {
-        grid-template-columns: 1fr;
-        padding: 24px 20px 60px;
-    }
-
-    .sidebar {
-        position: static;
-    }
-
     .nav {
         padding: 14px 20px;
         flex-wrap: wrap;
@@ -825,9 +816,115 @@ function continueToPayment(): void {
         justify-content: center;
     }
 
+    .step-line {
+        width: 24px;
+        margin: 0 6px;
+    }
+
+    .step-label {
+        font-size: 10px;
+    }
+
+    .page-body {
+        grid-template-columns: 1fr;
+        padding: 24px 20px 60px;
+    }
+
+    /* Show sidebar above form on mobile */
+    .sidebar {
+        position: static;
+        order: -1;
+    }
+
     .form-row.two-col {
         flex-direction: column;
         gap: 0;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .btn-continue {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .method-option {
+        padding: 12px;
+    }
+
+    .method-name {
+        font-size: 12px;
+    }
+
+    .method-eta {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav {
+        padding: 12px 16px;
+    }
+
+    .page-body {
+        padding: 16px 16px 48px;
+    }
+
+    .page-title {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .form-input {
+        font-size: 12px;
+        padding: 8px 0;
+    }
+
+    .form-label {
+        font-size: 9px;
+    }
+
+    .shipping-method {
+        margin-bottom: 24px;
+    }
+
+    .method-title {
+        font-size: 10px;
+    }
+
+    .btn-continue {
+        padding: 12px 20px;
+        font-size: 11px;
+    }
+
+    .order-items {
+        gap: 12px;
+    }
+
+    .item-img {
+        width: 48px;
+        height: 42px;
+    }
+
+    .item-name {
+        font-size: 11px;
+    }
+
+    .coupon-row {
+        margin-bottom: 14px;
+    }
+
+    .total-row.grand {
+        font-size: 14px;
+    }
+
+    .secure-note {
+        font-size: 10px;
+        flex-wrap: wrap;
     }
 }
 </style>

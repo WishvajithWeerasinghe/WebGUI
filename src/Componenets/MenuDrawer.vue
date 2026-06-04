@@ -211,15 +211,15 @@ import type { AuthUser } from '@/types'
 
 const theme = useThemeStore()
 
-const menuOpen = ref < boolean > (false)
-const showLogin = ref < boolean > (false)
-const showSignup = ref < boolean > (false)
-const isDark = computed < boolean > (() => theme.isDark)
-const authLoading = ref < boolean > (false)
-const authError = ref < string > ('')
+const menuOpen = ref<boolean>(false)
+const showLogin = ref<boolean>(false)
+const showSignup = ref<boolean>(false)
+const isDark = computed<boolean>(() => theme.isDark)
+const authLoading = ref<boolean>(false)
+const authError = ref<string>('')
 
 // Auth state persisted in localStorage
-const currentUser = ref < AuthUser | null > (
+const currentUser = ref<AuthUser | null>(
     localStorage.getItem('hevan_user')
         ? JSON.parse(localStorage.getItem('hevan_user')!)
         : null
@@ -754,18 +754,81 @@ async function handleSignup(): Promise<void> {
     transform: translate(-50%, -48%) scale(.96);
 }
 
-/* RESPONSIVE */
 @media (max-width: 600px) {
+    .menu-drawer {
+        width: 100%;
+        padding: 24px 20px;
+    }
+
+    .drawer-logo {
+        margin-bottom: 28px;
+    }
+
+    .drawer-logo-img {
+        height: 36px;
+    }
+
+    .drawer-link {
+        font-size: 16px;
+        padding: 12px 0;
+    }
+
+    .drawer-action-btn {
+        font-size: 15px;
+        padding: 14px 0;
+    }
+
     .auth-modal {
         grid-template-columns: 1fr;
+        width: 95vw;
+        max-height: 90vh;
+        overflow-y: auto;
     }
 
     .modal-img-side {
         display: none;
     }
 
+    .modal-form-side {
+        padding: 28px 20px;
+    }
+
+    .modal-title {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .auth-field {
+        margin-bottom: 14px;
+    }
+
+    .auth-input {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .btn-auth {
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .modal-close {
+        top: 10px;
+        right: 10px;
+    }
+}
+
+@media (max-width: 380px) {
     .menu-drawer {
-        width: 100%;
+        padding: 20px 16px;
+    }
+
+    .drawer-link {
+        font-size: 15px;
+    }
+
+    .modal-form-side {
+        padding: 24px 16px;
     }
 }
 </style>

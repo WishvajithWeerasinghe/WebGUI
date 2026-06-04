@@ -212,7 +212,6 @@ const posts = [
 </script>
 
 <style scoped>
-/* ─── CATEGORIES ─── */
 .categories-section {
     display: flex;
     flex-direction: column;
@@ -661,18 +660,22 @@ const posts = [
     letter-spacing: 0.06em;
 }
 
-/* ─── RESPONSIVE ─── */
+
 @media (max-width: 900px) {
+    .categories-section {
+        padding: 48px 0;
+    }
+
     .category-row {
         flex-direction: column !important;
         padding: 0 24px;
-        gap: 28px;
+        gap: 24px;
+        min-height: unset;
+        margin-bottom: 24px;
     }
 
     .category-text {
         max-width: 100%;
-        text-align: center;
-
         text-align: center;
         display: flex;
         flex-direction: column;
@@ -712,11 +715,16 @@ const posts = [
         flex-direction: column;
         gap: 16px;
         text-align: center;
+        padding: 20px 24px;
     }
 
     .testimonial-section {
         gap: 20px;
         padding: 60px 24px;
+    }
+
+    .testimonial-quote {
+        font-size: 17px;
     }
 
     .footer {
@@ -726,6 +734,73 @@ const posts = [
     .footer-grid {
         grid-template-columns: 1fr 1fr;
         gap: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .category-row {
+        padding: 0 16px;
+        gap: 16px;
+    }
+
+    .category-title {
+        font-size: 20px;
+    }
+
+    .category-img {
+        height: 200px;
+    }
+
+    .features-section {
+        padding: 32px 16px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .blog-section {
+        padding: 0 16px 40px;
+    }
+
+    .blog-img {
+        height: 200px;
+    }
+
+    .blog-title {
+        font-size: 16px;
+    }
+
+    .promo-banner {
+        padding: 18px 16px;
+    }
+
+    .promo-text {
+        font-size: 13px;
+    }
+
+    .testimonial-section {
+        padding: 48px 16px;
+        gap: 12px;
+    }
+
+    .testimonial-arrow {
+        width: 30px;
+        height: 30px;
+    }
+
+    .quote-mark {
+        font-size: 60px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .footer {
+        padding: 40px 16px 20px;
     }
 }
 </style>

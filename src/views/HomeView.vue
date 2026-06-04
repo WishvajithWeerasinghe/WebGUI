@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import HexanHero from '@/componenets/HexanHero.vue'
-import HexanSections from '@/componenets/HexanSections.vue'
-import HexanCategories from '@/componenets/HexanCategories.vue'
+import HexanHero from '@/Componenets/HexanHero.vue'
+import HexanSections from '@/Componenets/HexanSections.vue'
+import HexanCategories from '@/Componenets/HexanCategories.vue'
 </script>

@@ -140,6 +140,7 @@ function parallax(sx, sy) {
 
 </script>
 
+
 <style scoped>
 *,
 *::before,
@@ -509,6 +510,106 @@ nav {
 
     50% {
         opacity: 1
+    }
+}
+
+/* MOBILE  */
+@media (max-width: 768px) {
+    nav {
+        padding: 14px 20px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .logo-icon {
+        height: 36px;
+    }
+
+    .hero-headline {
+        font-size: clamp(18px, 6vw, 32px);
+        white-space: normal;
+        text-align: center;
+        width: 90%;
+        top: 12%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .hero-copy {
+        width: 88%;
+        padding: 20px 18px;
+        top: 50%;
+    }
+
+    .hero-copy p {
+        font-size: 13px;
+    }
+
+    .herobtn-view {
+        padding: 9px 18px;
+        font-size: 12px;
+    }
+
+    .item-lamp {
+        width: 80px;
+        left: 2%;
+        bottom: 35%;
+    }
+
+    .item-sidetable {
+        width: 90px;
+        left: 5%;
+        bottom: -5%;
+    }
+
+    .item-stool {
+        width: 60px;
+        left: 68%;
+    }
+
+    .item-chair {
+        width: 130px;
+        right: 2%;
+        bottom: 20%;
+    }
+
+    .item-pendant {
+        width: 70px;
+        left: 42%;
+        top: 2%;
+    }
+
+    .scroll-hint {
+        bottom: 16px;
+    }
+
+    .cart-badge {
+        width: 14px;
+        height: 14px;
+        font-size: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-headline {
+        font-size: clamp(16px, 5.5vw, 24px);
+        top: 10%;
+    }
+
+    .hero-copy {
+        width: 92%;
+        top: 52%;
+    }
+
+    /* Hide some floating items on very small screens */
+    .item-sidetable {
+        display: none;
+    }
+
+    .item-stool {
+        display: none;
     }
 }
 </style>

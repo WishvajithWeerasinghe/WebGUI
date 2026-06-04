@@ -26,7 +26,7 @@
                     </svg>
                     <span v-if="cart.totalItems > 0" class="cart-badge">{{ cart.totalItems }}</span>
                 </button>
-                <button aria-label="Menu" @click="menuDrawerRef.openMenu()">
+                <button aria-label="Menu" @click="menuDrawerRef?.openMenu()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <line x1="3" y1="6" x2="21" y2="6" />
                         <line x1="3" y1="12" x2="21" y2="12" />
@@ -839,8 +839,19 @@ watch(() => route.params.id, (id) => {
     letter-spacing: .06em;
 }
 
-/* RESPONSIVE */
 @media (max-width: 900px) {
+    .nav {
+        padding: 14px 20px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .breadcrumb {
+        padding: 14px 20px;
+    }
+
     .product-section {
         grid-template-columns: 1fr;
         padding: 0 20px 40px;
@@ -848,11 +859,26 @@ watch(() => route.params.id, (id) => {
 
     .thumbnails {
         flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
     }
 
     .thumb-img {
         width: 60px;
         height: 50px;
+    }
+
+    .product-info {
+        padding-left: 0;
+    }
+
+    .actions-row {
+        flex-wrap: wrap;
+    }
+
+    .btn-cart {
+        flex: unset;
+        width: 100%;
     }
 
     .related-grid {
@@ -864,14 +890,6 @@ watch(() => route.params.id, (id) => {
         padding: 0 20px 40px;
     }
 
-    .nav {
-        padding: 14px 20px;
-    }
-
-    .breadcrumb {
-        padding: 14px 20px;
-    }
-
     .footer {
         padding: 48px 24px 24px;
     }
@@ -879,6 +897,71 @@ watch(() => route.params.id, (id) => {
     .footer-grid {
         grid-template-columns: 1fr 1fr;
         gap: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-section {
+        padding: 0 16px 32px;
+    }
+
+    .thumbnails {
+        gap: 6px;
+    }
+
+    .thumb-img {
+        width: 52px;
+        height: 44px;
+    }
+
+    .product-title {
+        font-size: 22px;
+    }
+
+    .price {
+        font-size: 18px;
+    }
+
+    .qty-wrap {
+        flex: 1;
+    }
+
+    .btn-cart {
+        margin-top: 8px;
+        height: 42px;
+        font-size: 11px;
+    }
+
+    .tab-btn {
+        font-size: 11px;
+        padding: 10px 14px 10px 0;
+    }
+
+    .tab-content {
+        font-size: 12px;
+    }
+
+    .related-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .related-title {
+        font-size: 20px;
+    }
+
+    .tabs-section,
+    .related-section {
+        padding: 0 16px 32px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .footer {
+        padding: 36px 16px 20px;
     }
 }
 </style>
