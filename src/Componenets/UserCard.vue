@@ -9,7 +9,7 @@ defineProps<{
   <div class="user-card">
     <h3>User Profile</h3>
     <p><strong>Name: {{ name }}</strong></p>
-    <p><strong>Age: {{ age }} yearws old</strong></p>
+    <p><strong>Age: {{ age }} years old</strong></p>
   </div>
 </template>
 

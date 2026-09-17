@@ -153,19 +153,19 @@ const categories = [
     {
         title: 'CHAIRS',
         desc: 'More than just a seat; a signature piece that redefines your daily ritual. Explore our collection.',
-        img: '/src/assets/home/chair.jpg',
+        img: '/src/assets/chair.jpg',
         link: '/products/chairs',
     },
     {
         title: 'TABLES',
         desc: 'From morning rituals to evening conversations, discover a surface built for a lifetime of stories.',
-        img: '/src/assets/home/table.webp',
+        img: '/src/assets/table.webp',
         link: '/products/tables',
     },
     {
         title: 'ROOM ACCESSORIES',
         desc: 'Small additions with a big impact, discover the unique textures and forms that define your personal style.',
-        img: '/src/assets/home/accessories.jpg',
+        img: '/src/assets/accessories.jpg',
         link: '/products/accessories',
     },
 ]
@@ -198,14 +198,14 @@ const posts = [
         date: 'March 28, 2024',
         category: 'Pro Design',
         title: 'What Will Our Interiors of the Future Look — and Feel — Like?',
-        img: '/src/assets/home/bottom1.webp',
+        img: '/src/assets/bottom1.webp',
         link: 'https://www.architecturaldigest.com/story/interiors-of-the-future-look-feel-like',
     },
     {
         date: 'November 13, 2023',
         category: 'Interior Design',
         title: 'Furnish Your Home Like a Pro!',
-        img: '/src/assets/home/bottom2.webp',
+        img: '/src/assets/bottom2.webp',
         link: 'https://www.bradens.com/blogs/storied-by-bradens-furniture/interiors-of-the-future',
     },
 ]
